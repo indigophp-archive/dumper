@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <php>
+        <var name="mysql_host" value="localhost" />
+        <var name="mysql_username" value="test" />
+        <var name="mysql_password" value="" />
+        <var name="mysql_database" value="test" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Indigo Dumper Test Suite">
+            <directory>tests/Indigo/Dumper</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
