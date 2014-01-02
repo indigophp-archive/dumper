@@ -22,11 +22,11 @@ class VariableStore implements StoreInterface
 
     public function read()
     {
-    	return $this->data;
+        return $this->data;
     }
 
     public function save()
     {
-    	return true;
+        return true;
     }
 }

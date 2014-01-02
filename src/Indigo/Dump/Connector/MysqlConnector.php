@@ -154,20 +154,20 @@ class MysqlConnector extends AbstractConnector
 
     public function dumpCreateTable($table)
     {
-    	$dump = parent::dumpCreateTable($table);
+        $dump = parent::dumpCreateTable($table);
 
-	    $dump .= $this->pdo->query("SHOW CREATE TABLE `$table`")->fetchColumn(1) . ";\n\n";
+        $dump .= $this->pdo->query("SHOW CREATE TABLE `$table`")->fetchColumn(1) . ";\n\n";
 
-	    return $dump;
+        return $dump;
     }
 
     public function dumpCreateView($view)
     {
-    	$dump = parent::dumpCreateView($view);
+        $dump = parent::dumpCreateView($view);
 
-	    $dump .= $this->pdo->query("SHOW CREATE VIEW `$view`")->fetchColumn(1) . ";\n\n";
+        $dump .= $this->pdo->query("SHOW CREATE VIEW `$view`")->fetchColumn(1) . ";\n\n";
 
-	    return $dump;
+        return $dump;
     }
 
     protected function startTransaction()
