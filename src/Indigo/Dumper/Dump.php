@@ -8,15 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Indigo\Dump;
+namespace Indigo\Dumper;
 
-use Indigo\Dump\Connector\ConnectorInterface;
-use Indigo\Dump\Store\StoreInterface;
+use Indigo\Dumper\Connector\ConnectorInterface;
+use Indigo\Dumper\Store\StoreInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 
-class Dump
+class Dumper
 {
     protected $connector;
     protected $store;

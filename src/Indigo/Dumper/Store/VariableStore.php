@@ -8,30 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Indigo\Dump\Store;
+namespace Indigo\Dumper\Store;
 
-use Flysystem\Filesystem;
-
-class FlysystemStore implements StoreInterface
+class VariableStore implements StoreInterface
 {
-    protected $filesystem;
-    protected $name;
-
-    public function __construct(Filesystem $filesystem, $name)
-    {
-        $this->filesystem = $filesystem;
-        $this->name = $name;
-    }
+    protected $data;
 
     public function write($data)
     {
-        $this->filesystem->write($this->name, $data);
+        $this->data .= $data;
         return strlen($data);
     }
 
     public function read()
     {
-        return $this->filesystem->read($this->name);
+        return $this->data;
     }
 
     public function save()

@@ -1,5 +1,5 @@
 {
-    "name": "indigophp/dump",
+    "name": "indigophp/dumper",
     "description": "Dump databases to executable file",
     "license": "MIT",
     "keywords": ["dump", "MySQL" ,"SQL"],
@@ -20,6 +20,6 @@
         "frenkynet/flysystem": "Filesystem abstraction layer used for file uploads"
     },
     "autoload": {
-        "psr-0": {"Indigo\\Dump": "src/"}
+        "psr-0": {"Indigo\\Dumper": "src/"}
     }
 }

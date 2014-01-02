@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Indigo\Dump\Store;
+namespace Indigo\Dumper\Store;
 
 class TempStore implements StoreInterface
 {

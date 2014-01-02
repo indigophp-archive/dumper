@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Indigo\Dump\Connector;
+namespace Indigo\Dumper\Connector;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
