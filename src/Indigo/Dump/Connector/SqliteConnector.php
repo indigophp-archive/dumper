@@ -10,9 +10,6 @@
 
 namespace Indigo\Dump\Connector;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\OptionsResolver\Options;
 use PDO;
 
 class SqliteConnector extends AbstractConnector
