@@ -1,4 +1,4 @@
-<?php
+<?php<?php
 /*
  * This file is part of the Indigo Dump package.
  *
@@ -10,17 +10,26 @@
 
 namespace Indigo\Dumper\Store;
 
-class GzStore implements FileStore
+class AbstractStore implements StoreInterface
 {
-    public function __construct($file = null)
+    protected $writable = false;
+
+    protected $readable = true;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isWritable()
     {
-        is_null($file) and $file = tempnam(sys_get_temp_dir(), 'dump_');
-        $this->file = gzopen($file, 'wb9');
+        return $this->writable;
     }
 
-    public function __destruct()
+    /**
+     * {@inheritdoc}
+     */
+    public function isReadable()
     {
-        gzclose($this->file);
+        return $this->readable;
     }
 
     /**
@@ -31,8 +40,6 @@ class GzStore implements FileStore
         if (!$this->writable) {
             throw new \RuntimeException('Store is not writable');
         }
-
-        return gzwrite($this->file, $data);
     }
 
     /**
@@ -43,15 +50,14 @@ class GzStore implements FileStore
         if (!$this->readable) {
             throw new \RuntimeException('Store is not readable');
         }
+    }
 
-        gzrewind($this->file);
-
-        $read = '';
-
-        while (!gzeof($this->file)) {
-            $read .= gzread($this->file, 2048);
-        }
-
-        return $read;
+    /**
+     * {@inheritdoc}
+     */
+    public function save()
+    {
+        $this->writable = false;
+        return true;
     }
 }

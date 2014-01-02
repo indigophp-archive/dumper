@@ -12,9 +12,20 @@ namespace Indigo\Dumper\Store;
 
 use Flysystem\Filesystem;
 
-class FlysystemStore implements StoreInterface
+class FlysystemStore implements AbstractStore
 {
+    /**
+     * Filesystem object
+     *
+     * @var Filesystem
+     */
     protected $filesystem;
+
+    /**
+     * File name or path
+     *
+     * @var string
+     */
     protected $name;
 
     public function __construct(Filesystem $filesystem, $name)
@@ -23,19 +34,28 @@ class FlysystemStore implements StoreInterface
         $this->name = $name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write($data)
     {
-        $this->filesystem->write($this->name, $data);
+        if (!$this->writable) {
+            throw new \RuntimeException('Store is not writable');
+        }
+
+        $this->filesystem->put($this->name, $data);
         return strlen($data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read()
     {
-        return $this->filesystem->read($this->name);
-    }
+        if (!$this->readable) {
+            throw new \RuntimeException('Store is not readable');
+        }
 
-    public function save()
-    {
-        return true;
+        return $this->filesystem->read($this->name);
     }
 }

@@ -12,9 +12,45 @@ namespace Indigo\Dumper\Store;
 
 interface StoreInterface
 {
+    /**
+     * Write data to store
+     *
+     * Should only be called by dumper
+     *
+     * @param  string  $data
+     * @return integer Bytes written
+     */
     public function write($data);
 
+    /**
+     * Read data from store
+     *
+     * @return string
+     */
     public function read();
 
+    /**
+     * Do any further processing, and make store read-only
+     *
+     * Called automatically
+     *
+     * @return boolean Success
+     */
     public function save();
+
+    /**
+     * Check whether store is in writable state
+     *
+     * @return boolean
+     */
+    public function isWritable();
+
+    /**
+     * Check whether store is in readable state
+     *
+     * You can make your store write-only
+     *
+     * @return boolean
+     */
+    public function isReadable();
 }

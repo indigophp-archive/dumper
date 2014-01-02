@@ -10,14 +10,25 @@
 
 namespace Indigo\Dumper\Store;
 
-class VariableStore implements AbstractStore
+class FileStore implements AbstractStore
 {
     /**
-     * Data
+     * File handler
      *
-     * @var string
+     * @var resource
      */
-    protected $data;
+    protected $file;
+
+    public function __construct($file = null)
+    {
+        is_null($file) and $file = tempnam(sys_get_temp_dir(), 'dump_');
+        $this->file = fopen($file, 'w');
+    }
+
+    public function __destruct()
+    {
+        fclose($this->file);
+    }
 
     /**
      * {@inheritdoc}
@@ -25,8 +36,7 @@ class VariableStore implements AbstractStore
     public function write($data)
     {
         parent::write($data);
-        $this->data .= $data;
-        return strlen($data);
+        return fwrite($this->file, $data);
     }
 
     /**
@@ -35,6 +45,7 @@ class VariableStore implements AbstractStore
     public function read()
     {
         parent::read();
-        return $this->data;
+        rewind($this->file);
+        return stream_get_contents($this->file);
     }
 }
