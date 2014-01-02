@@ -10,7 +10,7 @@
 
 namespace Indigo\Dumper\Store;
 
-class GzStore implements FileStore
+class GzStore extends FileStore
 {
     public function __construct($file = null)
     {

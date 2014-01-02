@@ -10,6 +10,7 @@
 
 namespace Indigo\Dumper\Connector;
 
+use Indigo\Dumper\Store\StoreInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -72,7 +73,7 @@ abstract class AbstractConnector implements ConnectorInterface
         }
     }
 
-    public function dumpCreateTable($table)
+    public function dumpTableSchema($table)
     {
         $dump = "-- --------------------------------------------------------" .
             "\n\n" .
@@ -87,7 +88,7 @@ abstract class AbstractConnector implements ConnectorInterface
         return $dump;
     }
 
-    public function dumpCreateView($view)
+    public function dumpViewSchema($view)
     {
         $dump = "-- --------------------------------------------------------" .
             "\n\n" .
@@ -102,7 +103,7 @@ abstract class AbstractConnector implements ConnectorInterface
         return $dump;
     }
 
-    public function dumpTableData($table)
+    public function preDumpTableData($table)
     {
         $dump = "--\n" .
             "-- Dumping data for table `$table`\n" .
@@ -112,42 +113,51 @@ abstract class AbstractConnector implements ConnectorInterface
             $this->startTransaction();
         }
 
-        $dump .= $this->preTableData($table);
+        return $dump;
+    }
 
+    public function readTableData($table)
+    {
+        $data = $this->pdo->query("SELECT * FROM `$table`", PDO::FETCH_NUM);
+
+        return $data->rowCount() > 0 ? $data : false;
+    }
+
+    public function dumpTableData($table, $data, StoreInterface $store)
+    {
         $size = 0;
         $new = true;
 
-        foreach ($this->pdo->query("SELECT * FROM `$table`", PDO::FETCH_NUM) as $row) {
+        foreach ($this->readTableData($table) as $row) {
             $values = $this->fetchValues($row);
             $values = implode(',', $values);
-            $size += strlen($values);
 
             $new = $new or ! $this->options['extended_insert'];
 
             if ($new) {
-                $dump .= "INSERT INTO `$table` VALUES (" . $values . ")";
+                $size += $store->write("INSERT INTO `$table` VALUES (" . $values . ")");
                 $new = false;
             } else {
-                $dump .= ",(" . $values . ")";
+                $size += $store->write(",(" . $values . ")");
             }
 
             if ($size > self::MAX_LINE_SIZE or ! $this->options['extended_insert']) {
                 $new = true;
-                $dump .= ";\n";
+                $size = 0;
+                $store->write(";\n");
             }
         }
 
         if (!$new) {
-            $dump .= ";\n";
+            $store->write(";\n");
         }
+    }
 
-        $dump .= $this->postTableData($table);
-
+    public function postDumpTableData($table)
+    {
         if ($this->options['use_transaction']) {
             $this->commitTransaction();
         }
-
-        return $dump;
     }
 
     private function fetchValues($row)
@@ -163,6 +173,4 @@ abstract class AbstractConnector implements ConnectorInterface
 
     abstract protected function startTransaction();
     abstract protected function commitTransaction();
-    abstract protected function preTableData($table);
-    abstract protected function postTableData($table);
 }

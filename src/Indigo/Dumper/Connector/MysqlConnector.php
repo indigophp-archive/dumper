@@ -150,18 +150,18 @@ class MysqlConnector extends AbstractConnector
             "USE `" . $this->options['database'] . "`;\n\n";
     }
 
-    public function dumpCreateTable($table)
+    public function dumpTableSchema($table)
     {
-        $dump = parent::dumpCreateTable($table);
+        $dump = parent::dumpTableSchema($table);
 
         $dump .= $this->pdo->query("SHOW CREATE TABLE `$table`")->fetchColumn(1) . ";\n\n";
 
         return $dump;
     }
 
-    public function dumpCreateView($view)
+    public function dumpViewSchema($view)
     {
-        $dump = parent::dumpCreateView($view);
+        $dump = parent::dumpViewSchema($view);
 
         $dump .= $this->pdo->query("SHOW CREATE VIEW `$view`")->fetchColumn(1) . ";\n\n";
 
@@ -178,25 +178,33 @@ class MysqlConnector extends AbstractConnector
         $this->pdo->exec('COMMIT');
     }
 
-    public function preTableData($table)
+    public function preDumpTableData($table)
     {
+        $dump = parent::preDumpTableData($table);
+
         if ($this->options['use_lock']) {
             $this->pdo->exec("LOCK TABLES `$table` READ LOCAL");
         }
 
         if ($this->options['lock_table']) {
-            return "LOCK TABLES `$table` WRITE;\n";
+            $dump .= "LOCK TABLES `$table` WRITE;\n";
         }
+
+        return $dump;
     }
 
-    public function postTableData($table)
+    public function postDumpTableData($table)
     {
         if ($this->options['use_lock']) {
             $this->pdo->exec('UNLOCK TABLES');
         }
 
         if ($this->options['lock_table']) {
-            return "UNLOCK TABLES;\n";
+            $dump = "UNLOCK TABLES;\n";
         }
+
+        $dump .= parent::postDumpTableData($table);
+
+        return $dump;
     }
 }

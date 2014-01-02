@@ -34,10 +34,6 @@ class SqliteConnector extends AbstractConnector
             $header .= $this->dumpDisableForeignKeysCheck();
         }
 
-        if ($this->options['drop_database']) {
-            $header .= $this->dumpAddDropDatabase();
-        }
-
         return $header;
     }
 
@@ -68,10 +64,8 @@ class SqliteConnector extends AbstractConnector
 
     private function showTables($view = false)
     {
-        $query = $this->pdo->prepare("SELECT tbl_name FROM sqlite_master WHERE type=':type'");
-        $query->execute(array(':type' => $view ? 'view' : 'table'));
-
-        return $query->fetchAll();
+        $type = $view ? 'view' : 'table';
+        return $this->pdo->query("SELECT tbl_name FROM sqlite_master WHERE type='$type'")->fetchAll();
     }
 
     protected function dumpDisableForeignKeysCheck()
@@ -86,22 +80,44 @@ class SqliteConnector extends AbstractConnector
             "PRAGMA foreign_keys=ON;\n\n";
     }
 
-    public function dumpCreateTable($table)
+    public function dumpTableSchema($table)
     {
-        $dump = parent::dumpCreateTable($table);
+        $dump = parent::dumpTableSchema($table);
 
-        $dump .= $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'table' AND `table` = '$table'")->fetchColumn(0) . ";\n\n";
+        $dump .= $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'table' AND `tbl_name` = '$table'")->fetchColumn(0) . ";\n\n";
+
+        $dump .= $this->dumpTableIndexes($table);
 
         return $dump;
     }
 
-    public function dumpCreateView($view)
+    protected function dumpTableIndexes($table)
     {
-        $dump = parent::dumpCreateView($view);
+        $dump = '';
+        $indexes = $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'index' AND `tbl_name` = '$table'");
 
-        $dump .= $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'view' AND `table` = '$view'")->fetchColumn(0) . ";\n\n";
+        foreach ($indexes as $index) {
+            $dump .= reset($index) . ";\n\n";
+        }
 
         return $dump;
+    }
+
+    public function dumpViewSchema($view)
+    {
+        $dump = parent::dumpViewSchema($view);
+
+        $dump .= $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'view' AND `tbl_name` = '$view'")->fetchColumn(0) . ";\n\n";
+
+        return $dump;
+    }
+
+    public function readTableData($table)
+    {
+        $count = $this->pdo->query("SELECT COUNT(*) FROM `$table`", PDO::FETCH_NUM)->fetchColumn(0);
+        $data = $this->pdo->query("SELECT * FROM `$table`", PDO::FETCH_NUM);
+
+        return $count > 0 ? $data : false;
     }
 
     protected function startTransaction()
@@ -112,13 +128,5 @@ class SqliteConnector extends AbstractConnector
     protected function commitTransaction()
     {
         $this->pdo->exec('COMMIT');
-    }
-
-    protected function preTableData($table)
-    {
-    }
-
-    protected function postTableData($table)
-    {
     }
 }

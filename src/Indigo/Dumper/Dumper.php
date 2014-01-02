@@ -233,6 +233,11 @@ class Dumper
         return array_key_exists($view, $this->views) and $this->views[$view] === false;
     }
 
+    /**
+     * Dump database
+     *
+     * @return boolean Succes
+     */
     public function dump($file = null)
     {
         $this->write($this->options['header']);
@@ -251,6 +256,9 @@ class Dumper
         return $this->store->save($file);
     }
 
+    /**
+     * Dump tables
+     */
     protected function dumpTables()
     {
         $tables = $this->connector->getTables();
@@ -260,7 +268,7 @@ class Dumper
         }
 
         foreach ($tables as $table) {
-            $this->write($this->connector->dumpCreateTable($table));
+            $this->write($this->connector->dumpTableSchema($table));
 
             if ($this->options['no_data'] === false) {
                 $this->dumpTableData($table);
@@ -268,11 +276,29 @@ class Dumper
         }
     }
 
+    /**
+     * Dump table data
+     *
+     * @param  string $table
+     */
     protected function dumpTableData($table)
     {
-        $this->write($this->connector->dumpTableData($table));
+        // Workaround because Sqlite does not support rowCount
+        if ($data = $this->connector->readTableData($table)) {
+            // Get header, locks, etc
+            $this->write($this->connector->preDumpTableData($table));
+
+            // We pass store here, as we don't want to store too much data in a variable
+            $this->connector->dumpTableData($table, $data, $this->store);
+
+            // Get footer, unlocks, etc
+            $this->write($this->connector->postDumpTableData($table));
+        }
     }
 
+    /**
+     * Dump views
+     */
     protected function dumpViews()
     {
         $views = $this->connector->getViews();
@@ -282,15 +308,26 @@ class Dumper
         }
 
         foreach ($views as $view) {
-            $this->write($this->connector->dumpCreateView($view));
+            $this->write($this->connector->dumpViewSchema($view));
         }
     }
 
+    /**
+     * Write data to store
+     *
+     * @param  string  $data
+     * @return integer Bytes written
+     */
     protected function write($data)
     {
-        $this->store->write($data);
+        return $this->store->write($data);
     }
 
+    /**
+     * Read data from store
+     *
+     * @return string
+     */
     public function read()
     {
         return $this->store->read();

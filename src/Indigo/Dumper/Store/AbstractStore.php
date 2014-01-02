@@ -1,4 +1,4 @@
-<?php<?php
+<?php
 /*
  * This file is part of the Indigo Dump package.
  *
@@ -12,7 +12,7 @@ namespace Indigo\Dumper\Store;
 
 class AbstractStore implements StoreInterface
 {
-    protected $writable = false;
+    protected $writable = true;
 
     protected $readable = true;
 

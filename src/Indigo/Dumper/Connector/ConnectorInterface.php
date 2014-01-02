@@ -10,6 +10,8 @@
 
 namespace Indigo\Dumper\Connector;
 
+use Indigo\Dumper\Store\StoreInterface;
+
 interface ConnectorInterface
 {
     public function getHeader();
@@ -20,7 +22,20 @@ interface ConnectorInterface
 
     public function getViews();
 
-    public function dumpCreateTable($table);
+    public function dumpTableSchema($table);
 
-    public function dumpCreateView($view);
+    public function dumpViewSchema($view);
+
+    /**
+     * Read all data from table if any
+     *
+     * This function should check for data and return false if empty
+     *
+     * @param  string $table
+     * @return mixed Table data
+     */
+    public function readTableData($table);
+    public function preDumpTableData($table);
+    public function dumpTableData($table, $data, StoreInterface $store);
+    public function postDumpTableData($table);
 }

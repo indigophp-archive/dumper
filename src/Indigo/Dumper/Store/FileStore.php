@@ -10,7 +10,7 @@
 
 namespace Indigo\Dumper\Store;
 
-class FileStore implements AbstractStore
+class FileStore extends AbstractStore
 {
     /**
      * File handler
