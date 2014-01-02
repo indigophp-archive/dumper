@@ -12,11 +12,15 @@ namespace Indigo\Dump\Connector;
 
 interface ConnectorInterface
 {
-	public function getHeader();
+    public function getHeader();
+
+	public function getFooter();
 
 	public function getTables();
 
 	public function getViews();
 
-	public function dumpCreateTable($table);
+    public function dumpCreateTable($table);
+
+	public function dumpCreateView($view);
 }

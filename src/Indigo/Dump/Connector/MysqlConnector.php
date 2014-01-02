@@ -17,18 +17,9 @@ use PDO;
 
 class MysqlConnector extends AbstractConnector
 {
-    protected $pdo;
-    protected $settings;
-
-    public function __construct(array $options, array $settings = array())
+    public function __construct(array $options)
     {
-        $resolver = new OptionsResolver();
-        $this->setDefaultOptions($resolver);
-        $options = $this->options = $resolver->resolve($options);
-
-        $resolver = new OptionsResolver();
-        $this->setDefaultSettings($resolver);
-        $settings = $this->settings = $resolver->resolve($settings);
+        $options = $this->resolveOptions($options);
 
         $dsn = 'mysql:';
 
@@ -44,7 +35,7 @@ class MysqlConnector extends AbstractConnector
             $dsn,
             $options['username'],
             $options['password'],
-            $settings['pdo_options']
+            $options['pdo_options']
         );
 
         // This is needed on some PHP versions
@@ -52,65 +43,40 @@ class MysqlConnector extends AbstractConnector
     }
 
     /**
-     * Set default MySQL connection details
+     * Set default MySQL connection and dump details
      *
      * @param OptionsResolverInterface $resolver
      */
     protected function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        parent::setDefaultOptions($resolver);
+
         $resolver->setDefaults(array(
-            'host' => 'localhost',
-            'port' => 3306,
+            'host'          => 'localhost',
+            'port'          => 3306,
+            'drop_database' => false,
+            'lock_tables'   => false,
+            'add_lock'      => true,
+            'pdo_options'   => array(
+                PDO::ATTR_PERSISTENT         => true,
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+            ),
         ));
 
         $resolver->setOptional(array('unix_socket'));
 
-        $resolver->setRequired(array('username', 'password', 'database'));
+        $resolver->setRequired(array('username', 'password'));
 
         $resolver->setAllowedTypes(array(
-            'host'        => 'string',
-            'port'        => 'integer',
-            'unix_socket' => 'string',
-            'username'    => 'string',
-            'password'    => 'string',
-            'database'    => 'string',
-        ));
-    }
-
-    /**
-     * Set default MySQL dump settings
-     *
-     * @param OptionsResolverInterface $resolver
-     */
-    protected function setDefaultSettings(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-			'drop_database'              => false,
-			'drop_table'                 => false,
-			'drop_view'                  => false,
-			'single_transaction'         => false,
-			'lock_tables'                => false,
-			'add_locks'                  => true,
-			'extended_insert'            => true,
-			'disable_foreign_keys_check' => false,
-			'pdo_options'                => array(
-                PDO::ATTR_PERSISTENT         => true,
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
-            )
-        ));
-
-
-        $resolver->setAllowedTypes(array(
-			'drop_database'              => 'bool',
-			'drop_table'                 => 'bool',
-			'drop_view'                  => 'bool',
-			'single_transaction'         => 'bool',
-			'lock_tables'                => 'bool',
-			'add_locks'                  => 'bool',
-			'extended_insert'            => 'bool',
-			'disable_foreign_keys_check' => 'bool',
-			'pdo_options'                => 'array'
+            'host'          => 'string',
+            'port'          => 'integer',
+            'unix_socket'   => 'string',
+            'username'      => 'string',
+            'password'      => 'string',
+            'drop_database' => 'bool',
+            'lock_tables'   => 'bool',
+            'add_lock'      => 'bool',
         ));
     }
 
@@ -118,15 +84,26 @@ class MysqlConnector extends AbstractConnector
     {
         $header = '';
 
-        if ($this->settings['disable_foreign_keys_check']) {
+        if ($this->options['disable_foreign_keys_check']) {
             $header .= $this->dumpDisableForeignKeysCheck();
         }
 
-        if ($this->settings['drop_database']) {
+        if ($this->options['drop_database']) {
             $header .= $this->dumpAddDropDatabase();
         }
 
         return $header;
+    }
+
+    public function getFooter()
+    {
+        $footer = '';
+
+        if ($this->options['disable_foreign_keys_check']) {
+            $footer .= $this->dumpEnableForeignKeysCheck();
+        }
+
+        return $footer;
     }
 
     public function getTables()
@@ -145,7 +122,7 @@ class MysqlConnector extends AbstractConnector
 
     private function showTables($view = false)
     {
-        $query = $this->pdo->prepare('SHOW FULL TABLES WHERE Table_type LIKE :type');
+        $query = $this->pdo->prepare('SHOW FULL TABLES WHERE `Table_type` LIKE :type');
         $query->execute(array(':type' => $view ? 'VIEW' : 'BASE TABLE'));
 
         return $query->fetchAll();
@@ -155,6 +132,12 @@ class MysqlConnector extends AbstractConnector
     {
         return "-- Ignore checking of foreign keys\n" .
             "SET FOREIGN_KEY_CHECKS = 0;\n\n";
+    }
+
+    protected function dumpEnableForeignKeysCheck()
+    {
+        return "\n-- Unignore checking of foreign keys\n" .
+            "SET FOREIGN_KEY_CHECKS = 1;\n\n";
     }
 
     protected function dumpAddDropDatabase()
@@ -171,27 +154,51 @@ class MysqlConnector extends AbstractConnector
 
     public function dumpCreateTable($table)
     {
-    	$dump = '';
+    	$dump = parent::dumpCreateTable($table);
 
-	    if ($this->settings['drop_table']) {
-	    	$dump .= "DROP TABLE IF EXISTS `$table`;\n\n";
-	    }
+	    $dump .= $this->pdo->query("SHOW CREATE TABLE `$table`")->fetchColumn(1) . ";\n\n";
 
-	    $dump .= $this->pdo->query('SHOW CREATE TABLE ' . $table)->fetchColumn(1);
-
-	    return $view;
+	    return $dump;
     }
 
     public function dumpCreateView($view)
     {
-    	$dump = '';
+    	$dump = parent::dumpCreateView($view);
 
-	    if ($this->settings['drop_view']) {
-	    	$dump .= "DROP VIEW IF EXISTS `$view`;\n\n";
-	    }
-
-	    $dump .= $this->pdo->query('SHOW CREATE VIEW ' . $view)->fetchColumn(1);
+	    $dump .= $this->pdo->query("SHOW CREATE VIEW `$view`")->fetchColumn(1) . ";\n\n";
 
 	    return $dump;
+    }
+
+    protected function startTransaction()
+    {
+        $this->pdo->exec("SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ; START TRANSACTION");
+    }
+
+    protected function commitTransaction()
+    {
+        $this->pdo->exec('COMMIT');
+    }
+
+    public function preTableData($table)
+    {
+        if ($this->options['lock_tables']) {
+            $this->pdo->exec("LOCK TABLES `$table` READ LOCAL");
+        }
+
+        if ($this->options['add_lock']) {
+            return "LOCK TABLES `$table` WRITE;\n";
+        }
+    }
+
+    public function postTableData($table)
+    {
+        if ($this->options['lock_tables']) {
+            $this->pdo->exec('UNLOCK TABLES');
+        }
+
+        if ($this->options['add_lock']) {
+            return "UNLOCK TABLES;\n";
+        }
     }
 }

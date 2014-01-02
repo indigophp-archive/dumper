@@ -11,6 +11,7 @@
 namespace Indigo\Dump;
 
 use Indigo\Dump\Connector\ConnectorInterface;
+use Indigo\Dump\Store\StoreInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -18,13 +19,15 @@ use Symfony\Component\OptionsResolver\Options;
 class Dump
 {
     protected $connector;
+    protected $store;
     protected $options = array();
     protected $tables = array();
     protected $views = array();
 
-    public function __construct(ConnectorInterface $connector, array $options = array())
+    public function __construct(ConnectorInterface $connector, StoreInterface $store, array $options = array())
     {
         $this->connector = $connector;
+        $this->store = $store;
 
         $resolver = new OptionsResolver();
         $this->setDefaultOptions($resolver, true);
@@ -42,7 +45,9 @@ class Dump
                 "--\n" .
                 "-- Database: `{$this->getConnectorOption('database')}`\n" .
                 "--\n\n",
+            'tables'             => true,
             'no_data'            => false,
+            'views'              => true,
             'single_transaction' => false,
             'lock_tables'        => false,
             'add_locks'          => true,
@@ -102,13 +107,13 @@ class Dump
     protected function setTable($table, $set = true)
     {
         if (is_array($table)) {
-        	foreach ($table as $t) {
-        		$this->setTable($t, $set);
-        	}
+            foreach ($table as $t) {
+                $this->setTable($t, $set);
+            }
         } else {
-    		if (empty($table) or ! is_string($table)) {
-    			throw new \InvalidArgumentException('Invalid table name: "' . $table . '"');
-    		}
+            if (empty($table) or ! is_string($table)) {
+                throw new \InvalidArgumentException('Invalid table name: "' . $table . '"');
+            }
 
             $this->tables[$table] = $set;
         }
@@ -185,13 +190,13 @@ class Dump
     protected function setView($view, $set = true)
     {
         if (is_array($view)) {
-        	foreach ($view as $v) {
-        		$this->setView($v, $set);
-        	}
+            foreach ($view as $v) {
+                $this->setView($v, $set);
+            }
         } else {
-    		if (empty($view) or ! is_string($view)) {
-    			throw new \InvalidArgumentException('Invalid table name: "' . $view . '"');
-    		}
+            if (empty($view) or ! is_string($view)) {
+                throw new \InvalidArgumentException('Invalid table name: "' . $view . '"');
+            }
 
             $this->views[$view] = $set;
         }
@@ -234,9 +239,24 @@ class Dump
 
     public function dump()
     {
-        $dump = $this->options['header'];
-        $dump .= $this->connector->getHeader();
+        $this->write($this->options['header']);
+        $this->write($this->connector->getHeader());
 
+        if ($this->options['tables']) {
+            $this->dumpTables();
+        }
+
+        if ($this->options['views']) {
+            $this->dumpViews();
+        }
+
+        $this->write($this->connector->getFooter());
+
+        return $this;
+    }
+
+    protected function dumpTables()
+    {
         $tables = $this->connector->getTables();
 
         if ($this->hasTable()) {
@@ -244,13 +264,21 @@ class Dump
         }
 
         foreach ($tables as $table) {
-            $dump .= $this->dumpCreateTable($table);
+            $this->write($this->connector->dumpCreateTable($table));
 
             if ($this->options['no_data'] === false) {
-            	# code...
+                $this->dumpTableData($table);
             }
         }
+    }
 
+    protected function dumpTableData($table)
+    {
+        $this->write($this->connector->dumpTableData($table));
+    }
+
+    protected function dumpViews()
+    {
         $views = $this->connector->getViews();
 
         if ($this->hasView()) {
@@ -258,33 +286,22 @@ class Dump
         }
 
         foreach ($views as $view) {
-            $dump .= $this->dumpCreateView($view);
+            $this->write($this->connector->dumpCreateView($view));
         }
     }
 
-    public function dumpCreateTable($table)
+    protected function write($data)
     {
-    	$dump = "-- --------------------------------------------------------" .
-	        "\n\n" .
-	        "--\n" .
-	        "-- Table structure for table `$table`\n" .
-	        "--\n\n";
-
-	    $dump .= $this->connector->dumpCreateTable($table);
-
-	    return $dump;
+        $this->store->write($data);
     }
 
-    public function dumpCreateView($view)
+    public function read()
     {
-    	$dump = "-- --------------------------------------------------------" .
-	        "\n\n" .
-	        "--\n" .
-	        "-- Table structure for view `$view`\n" .
-	        "--\n\n";
+        return $this->store->read();
+    }
 
-	    $dump .= $this->connector->dumpCreateView($view);
-
-	    return $dump;
+    public function save($file = null)
+    {
+        return $this->store->save($file);
     }
 }
