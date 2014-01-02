@@ -45,13 +45,9 @@ class Dump
                 "--\n" .
                 "-- Database: `{$this->getConnectorOption('database')}`\n" .
                 "--\n\n",
-            'tables'             => true,
-            'no_data'            => false,
-            'views'              => true,
-            'single_transaction' => false,
-            'lock_tables'        => false,
-            'add_locks'          => true,
-            'extended_insert'    => true,
+            'tables'  => true,
+            'no_data' => false,
+            'views'   => true,
         ));
     }
 
