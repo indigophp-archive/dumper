@@ -233,7 +233,7 @@ class Dumper
         return array_key_exists($view, $this->views) and $this->views[$view] === false;
     }
 
-    public function dump()
+    public function dump($file = null)
     {
         $this->write($this->options['header']);
         $this->write($this->connector->getHeader());
@@ -248,7 +248,7 @@ class Dumper
 
         $this->write($this->connector->getFooter());
 
-        return $this;
+        return $this->store->save($file);
     }
 
     protected function dumpTables()
@@ -294,10 +294,5 @@ class Dumper
     public function read()
     {
         return $this->store->read();
-    }
-
-    public function save($file = null)
-    {
-        return $this->store->save($file);
     }
 }

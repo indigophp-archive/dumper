@@ -53,8 +53,8 @@ class MysqlConnector extends AbstractConnector
             'host'          => 'localhost',
             'port'          => 3306,
             'drop_database' => false,
-            'lock_tables'   => false,
-            'add_lock'      => true,
+            'use_lock'      => false,
+            'lock_table'    => true,
             'pdo_options'   => array(
                 PDO::ATTR_PERSISTENT         => true,
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -73,8 +73,8 @@ class MysqlConnector extends AbstractConnector
             'username'      => 'string',
             'password'      => 'string',
             'drop_database' => 'bool',
-            'lock_tables'   => 'bool',
-            'add_lock'      => 'bool',
+            'use_lock'      => 'bool',
+            'lock_table'    => 'bool',
         ));
     }
 
@@ -180,22 +180,22 @@ class MysqlConnector extends AbstractConnector
 
     public function preTableData($table)
     {
-        if ($this->options['lock_tables']) {
+        if ($this->options['use_lock']) {
             $this->pdo->exec("LOCK TABLES `$table` READ LOCAL");
         }
 
-        if ($this->options['add_lock']) {
+        if ($this->options['lock_table']) {
             return "LOCK TABLES `$table` WRITE;\n";
         }
     }
 
     public function postTableData($table)
     {
-        if ($this->options['lock_tables']) {
+        if ($this->options['use_lock']) {
             $this->pdo->exec('UNLOCK TABLES');
         }
 
-        if ($this->options['add_lock']) {
+        if ($this->options['lock_table']) {
             return "UNLOCK TABLES;\n";
         }
     }
