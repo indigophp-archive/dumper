@@ -3,7 +3,8 @@
 **Dump databases to SQL file and store it where you want**
 
 
-Current supported databases:
+Currently supported databases:
+
 * MySQL
 * Sqlite
 
