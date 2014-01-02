@@ -25,38 +25,38 @@ Via Composer
 ``` php
 // Options and default values
 $options => array(
-	/* Required options */
+    /* Required options */
     'database' => 'test',
 
     /* Connector settings */
-	'drop_table'                 => false, /* Add drop table statement */
-	'drop_view'                  => false, /* Add drop view statement */
-	'disable_foreign_keys_check' => false,
-	'use_transaction'            => false, /* Use transaction for data retrieving */
-	'extended_insert'            => true, /* Use extended insert statements */
-	'pdo_options'                => array(), /* Options passed to the PDO driver */
+    'drop_table'                 => false, /* Add drop table statement */
+    'drop_view'                  => false, /* Add drop view statement */
+    'disable_foreign_keys_check' => false,
+    'use_transaction'            => false, /* Use transaction for data retrieving */
+    'extended_insert'            => true, /* Use extended insert statements */
+    'pdo_options'                => array(), /* Options passed to the PDO driver */
 
-	/* MySQL Connector specific options */
-	/* Required options */
-	'username' => 'test',
-	'password' => 'secret',
+    /* MySQL Connector specific options */
+    /* Required options */
+    'username' => 'test',
+    'password' => 'secret',
 
     /* Optional options */
-	'host'          => 'localhost',
-	'port'          => 3306,
-	'unix_socket'   => 'unix:///var/run/mysql.sock',
-	'drop_database' => false, /* Add drop database statement */
-	'use_lock'      => false, /* Lock tables during data retrieve */
-	'lock_table'    => true, /* Add lock table statement */
+    'host'          => 'localhost',
+    'port'          => 3306,
+    'unix_socket'   => 'unix:///var/run/mysql.sock',
+    'drop_database' => false, /* Add drop database statement */
+    'use_lock'      => false, /* Lock tables during data retrieve */
+    'lock_table'    => true, /* Add lock table statement */
 );
 $connector = new Indigo\Dumper\Connector\MysqlConnector($options);
 $store = new Indigo\Dumper\Store\GzStore();
 
 // Options and default values
 $options = array(
-	'tables' => true, /* Include tables */
-	'no_data' => false, /* If true, data will be skipped */
-	'views' => true, /* Include views */
+    'tables' => true, /* Include tables */
+    'no_data' => false, /* If true, data will be skipped */
+    'views' => true, /* Include views */
 );
 
 $dumper = new Indigo\Dumper\Dumper($connector, $store, $options);
@@ -98,7 +98,7 @@ $ phpunit
 
 ## Contributing
 
-Please see [CONTRIBUTING](https://github.com/indigophp/dumper/blob/master/CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](https://github.com/indigophp/dumper/blob/develop/CONTRIBUTING.md) for details.
 
 ## Credits
 
@@ -108,4 +108,4 @@ Please see [CONTRIBUTING](https://github.com/indigophp/dumper/blob/master/CONTRI
 
 ## License
 
-The MIT License (MIT). Please see [License File](https://github.com/php-loep/:package_name/blob/master/LICENSE) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/indigophp/dumper/blob/develop/LICENSE) for more information.
