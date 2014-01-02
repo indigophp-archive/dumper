@@ -10,8 +10,6 @@
 
 namespace Indigo\Dumper\Store;
 
-use Flysystem\Filesystem;
-
 class GzStore extends TempStore
 {
     public function save($file = null)
