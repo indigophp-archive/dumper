@@ -1,0 +1,25 @@
+{
+    "name": "indigophp/dump",
+    "description": "Dump databases to executable file",
+    "license": "MIT",
+    "keywords": ["dump", "MySQL" ,"SQL"],
+    "authors": [
+        {
+            "name": "Márk Sági-Kazár",
+            "email": "mark.sagikazar@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/options-resolver": "v2.4.0"
+    },
+    "require-dev": {
+        "frenkynet/flysystem": "dev-master",
+        "mockery/mockery": "@stable"
+    },
+    "suggest": {
+        "frenkynet/flysystem": "Filesystem abstraction layer used for file uploads"
+    },
+    "autoload": {
+        "psr-0": {"Indigo\\Dump": "src/"}
+    }
+}
