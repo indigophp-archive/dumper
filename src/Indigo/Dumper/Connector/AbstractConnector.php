@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -16,13 +16,40 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 use PDO;
 
+/**
+ * Abstract Connector
+ *
+ * Uses PDO to connect to database
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 abstract class AbstractConnector implements ConnectorInterface
 {
+    /**
+     * Max line length
+     */
     const MAX_LINE_SIZE = 1000000;
 
+    /**
+     * Connector options
+     *
+     * @var array
+     */
     protected $options = array();
+
+    /**
+     * PDO object
+     *
+     * @var PDO
+     */
     protected $pdo;
 
+    /**
+     * Resolve options
+     *
+     * @param  array  $options
+     * @return array Resolved options
+     */
     protected function resolveOptions(array $options = array())
     {
         $resolver = new OptionsResolver();
@@ -62,6 +89,13 @@ abstract class AbstractConnector implements ConnectorInterface
         ));
     }
 
+    /**
+     * Get option
+     *
+     * @param  string $option  Option key
+     * @param  mixed  $default Default value if key is not found
+     * @return mixed Option value
+     */
     public function getOption($option = null, $default = null)
     {
         if (is_null($option)) {
@@ -73,6 +107,9 @@ abstract class AbstractConnector implements ConnectorInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function dumpTableSchema($table)
     {
         $dump = "-- --------------------------------------------------------" .
@@ -88,6 +125,9 @@ abstract class AbstractConnector implements ConnectorInterface
         return $dump;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function dumpViewSchema($view)
     {
         $dump = "-- --------------------------------------------------------" .
@@ -103,6 +143,9 @@ abstract class AbstractConnector implements ConnectorInterface
         return $dump;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function preDumpTableData($table)
     {
         $dump = "--\n" .
@@ -116,6 +159,9 @@ abstract class AbstractConnector implements ConnectorInterface
         return $dump;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function readTableData($table)
     {
         $data = $this->pdo->query("SELECT * FROM `$table`", PDO::FETCH_NUM);
@@ -123,6 +169,9 @@ abstract class AbstractConnector implements ConnectorInterface
         return $data->rowCount() > 0 ? $data : false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function dumpTableData($table, $data, StoreInterface $store)
     {
         $size = 0;
@@ -132,6 +181,7 @@ abstract class AbstractConnector implements ConnectorInterface
             $values = $this->fetchValues($row);
             $values = implode(',', $values);
 
+            // Use INSERT statement if line size limit exceeded or extended_insert is disabled
             $new = $new or ! $this->options['extended_insert'];
 
             if ($new) {
@@ -141,6 +191,7 @@ abstract class AbstractConnector implements ConnectorInterface
                 $size += $store->write(",(" . $values . ")");
             }
 
+            // Line size limit exceeded
             if ($size > self::MAX_LINE_SIZE or ! $this->options['extended_insert']) {
                 $new = true;
                 $size = 0;
@@ -153,6 +204,9 @@ abstract class AbstractConnector implements ConnectorInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function postDumpTableData($table)
     {
         if ($this->options['use_transaction']) {
@@ -160,7 +214,10 @@ abstract class AbstractConnector implements ConnectorInterface
         }
     }
 
-    private function fetchValues($row)
+    /**
+     * {@inheritdoc}
+     */
+    protected function fetchValues($row)
     {
         $vals = array();
 
@@ -171,6 +228,13 @@ abstract class AbstractConnector implements ConnectorInterface
         return $vals;
     }
 
+    /**
+     * Start transaction
+     */
     abstract protected function startTransaction();
+
+    /**
+     * Commit transaction
+     */
     abstract protected function commitTransaction();
 }
