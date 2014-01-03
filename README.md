@@ -1,5 +1,7 @@
 # Indigo Dumper
 
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/indigophp/dumper/badges/quality-score.png?s=67092d22b834c80f6cd14300c7a57f8d099c6b07)](https://scrutinizer-ci.com/g/indigophp/dumper/)
+
 **Dump databases to SQL file and store it where you want**
 
 
