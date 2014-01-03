@@ -10,6 +10,9 @@
 
 namespace Indigo\Dumper\Store;
 
+use Indigo\Dumper\Exception\StoreNotWritableException;
+use Indigo\Dumper\Exception\StoreNotReadableException;
+
 /**
  * File Store
  *
@@ -29,7 +32,7 @@ class FileStore extends AbstractStore
     public function __construct($file = null)
     {
         is_null($file) and $file = tempnam(sys_get_temp_dir(), 'dump_');
-        $this->file = fopen($file, 'w');
+        $this->file = fopen($file, 'w+');
     }
 
     public function __destruct()
@@ -42,7 +45,10 @@ class FileStore extends AbstractStore
      */
     public function write($data)
     {
-        parent::write($data);
+        if (!$this->writable) {
+            throw new StoreNotWritableException('Store is not writable');
+        }
+
         return fwrite($this->file, $data);
     }
 
@@ -51,7 +57,10 @@ class FileStore extends AbstractStore
      */
     public function read()
     {
-        parent::read();
+        if (!$this->readable) {
+            throw new StoreNotReadableException('Store is not readable');
+        }
+
         rewind($this->file);
         return stream_get_contents($this->file);
     }
