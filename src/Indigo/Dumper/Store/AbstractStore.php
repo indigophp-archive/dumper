@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -10,10 +10,27 @@
 
 namespace Indigo\Dumper\Store;
 
+/**
+ * Abstract Store
+ *
+ * Basic functions
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 class AbstractStore implements StoreInterface
 {
+    /**
+     * Is store writable?
+     *
+     * @var boolean
+     */
     protected $writable = true;
 
+    /**
+     * Is store readable?
+     *
+     * @var boolean
+     */
     protected $readable = true;
 
     /**

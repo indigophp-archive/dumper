@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -10,6 +10,13 @@
 
 namespace Indigo\Dumper\Store;
 
+/**
+ * Gz Store
+ *
+ * Store file with gzip compression
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 class GzStore extends FileStore
 {
     public function __construct($file = null)

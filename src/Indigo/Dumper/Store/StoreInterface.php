@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -10,6 +10,11 @@
 
 namespace Indigo\Dumper\Store;
 
+/**
+ * Store Interface
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 interface StoreInterface
 {
     /**

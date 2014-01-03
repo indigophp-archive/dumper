@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -10,6 +10,13 @@
 
 namespace Indigo\Dumper\Store;
 
+/**
+ * Variable Store
+ *
+ * Store data in variable
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 class VariableStore implements AbstractStore
 {
     /**
@@ -24,7 +31,10 @@ class VariableStore implements AbstractStore
      */
     public function write($data)
     {
-        parent::write($data);
+        if (!$this->writable) {
+            throw new \RuntimeException('Store is not writable');
+        }
+
         $this->data .= $data;
         return strlen($data);
     }
@@ -34,7 +44,10 @@ class VariableStore implements AbstractStore
      */
     public function read()
     {
-        parent::read();
+        if (!$this->readable) {
+            throw new \RuntimeException('Store is not readable');
+        }
+
         return $this->data;
     }
 }

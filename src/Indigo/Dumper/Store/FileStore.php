@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -10,6 +10,13 @@
 
 namespace Indigo\Dumper\Store;
 
+/**
+ * File Store
+ *
+ * Store file without compression
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 class FileStore extends AbstractStore
 {
     /**
