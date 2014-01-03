@@ -238,7 +238,7 @@ class Dumper
      *
      * @return boolean Succes
      */
-    public function dump($file = null)
+    public function dump()
     {
         $this->write($this->options['header']);
         $this->write($this->connector->getHeader());
@@ -253,7 +253,7 @@ class Dumper
 
         $this->write($this->connector->getFooter());
 
-        return $this->store->save($file);
+        return $this->store->save();
     }
 
     /**
