@@ -110,6 +110,46 @@ abstract class AbstractConnector implements ConnectorInterface
     /**
      * {@inheritdoc}
      */
+    public function getHeader()
+    {
+        if ($this->options['disable_foreign_keys_check']) {
+            return $this->dumpDisableForeignKeysCheck();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFooter()
+    {
+        if ($this->options['disable_foreign_keys_check']) {
+            return $this->dumpEnableForeignKeysCheck();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTables()
+    {
+        return array_map(function($item) {
+            return reset($item);
+        }, $this->showObjects());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getViews()
+    {
+        return array_map(function($item) {
+            return reset($item);
+        }, $this->showObjects(true));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function dumpTableSchema($table)
     {
         $dump = "-- --------------------------------------------------------" .
@@ -227,6 +267,28 @@ abstract class AbstractConnector implements ConnectorInterface
 
         return $vals;
     }
+
+    /**
+     * Show tables or views
+     *
+     * @param  boolean $view Show views
+     * @return array
+     */
+    abstract protected function showObjects($view = false);
+
+    /**
+     * Dump disable foreign keys check
+     *
+     * @return string Dump
+     */
+    abstract protected function dumpDisableForeignKeysCheck();
+
+    /**
+     * Dump enable foreign keys check
+     *
+     * @return string Dump
+     */
+    abstract protected function dumpEnableForeignKeysCheck();
 
     /**
      * Start transaction

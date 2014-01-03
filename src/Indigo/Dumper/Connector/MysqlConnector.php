@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -13,6 +13,11 @@ namespace Indigo\Dumper\Connector;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use PDO;
 
+/**
+ * MySQL Connector
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 class MysqlConnector extends AbstractConnector
 {
     public function __construct(array $options)
@@ -78,13 +83,12 @@ class MysqlConnector extends AbstractConnector
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getHeader()
     {
-        $header = '';
-
-        if ($this->options['disable_foreign_keys_check']) {
-            $header .= $this->dumpDisableForeignKeysCheck();
-        }
+        $header = parent::getHeader();
 
         if ($this->options['drop_database']) {
             $header .= $this->dumpAddDropDatabase();
@@ -93,32 +97,10 @@ class MysqlConnector extends AbstractConnector
         return $header;
     }
 
-    public function getFooter()
-    {
-        $footer = '';
-
-        if ($this->options['disable_foreign_keys_check']) {
-            $footer .= $this->dumpEnableForeignKeysCheck();
-        }
-
-        return $footer;
-    }
-
-    public function getTables()
-    {
-        return array_map(function($item) {
-            return reset($item);
-        }, $this->showTables());
-    }
-
-    public function getViews()
-    {
-        return array_map(function($item) {
-            return reset($item);
-        }, $this->showTables(true));
-    }
-
-    private function showTables($view = false)
+    /**
+     * {@inheritdoc}
+     */
+    protected function showObjects($view = false)
     {
         $query = $this->pdo->prepare('SHOW FULL TABLES WHERE `Table_type` LIKE :type');
         $query->execute(array(':type' => $view ? 'VIEW' : 'BASE TABLE'));
@@ -126,18 +108,29 @@ class MysqlConnector extends AbstractConnector
         return $query->fetchAll();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function dumpDisableForeignKeysCheck()
     {
         return "-- Ignore checking of foreign keys\n" .
             "SET FOREIGN_KEY_CHECKS = 0;\n\n";
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function dumpEnableForeignKeysCheck()
     {
         return "\n-- Unignore checking of foreign keys\n" .
             "SET FOREIGN_KEY_CHECKS = 1;\n\n";
     }
 
+    /**
+     * Dump DROP DATABASE
+     *
+     * @return string Dump
+     */
     protected function dumpAddDropDatabase()
     {
         $charset = $this->pdo->query("SHOW VARIABLES LIKE 'character_set_database';")->fetchColumn(1);
@@ -150,6 +143,9 @@ class MysqlConnector extends AbstractConnector
             "USE `" . $this->options['database'] . "`;\n\n";
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function dumpTableSchema($table)
     {
         $dump = parent::dumpTableSchema($table);
@@ -159,6 +155,9 @@ class MysqlConnector extends AbstractConnector
         return $dump;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function dumpViewSchema($view)
     {
         $dump = parent::dumpViewSchema($view);
@@ -168,16 +167,25 @@ class MysqlConnector extends AbstractConnector
         return $dump;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function startTransaction()
     {
         $this->pdo->exec("SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ; START TRANSACTION");
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function commitTransaction()
     {
         $this->pdo->exec('COMMIT');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function preDumpTableData($table)
     {
         $dump = parent::preDumpTableData($table);
@@ -193,6 +201,9 @@ class MysqlConnector extends AbstractConnector
         return $dump;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function postDumpTableData($table)
     {
         if ($this->options['use_lock']) {
