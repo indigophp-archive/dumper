@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -12,18 +12,57 @@ namespace Indigo\Dumper\Connector;
 
 use Indigo\Dumper\Store\StoreInterface;
 
+/**
+ * Database ConnectorInterface
+ *
+ * Handles connection to database and creates dump content
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 interface ConnectorInterface
 {
+    /**
+     * Get dump header
+     *
+     * @return string Dump
+     */
     public function getHeader();
 
+    /**
+     * Get dump footer
+     *
+     * @return string Dump
+     */
     public function getFooter();
 
+    /**
+     * Get list of tables
+     *
+     * @return array
+     */
     public function getTables();
 
+    /**
+     * Get list of views
+     *
+     * @return array
+     */
     public function getViews();
 
+    /**
+     * Dump table schema
+     *
+     * @param  string $table Table name
+     * @return string Table schema
+     */
     public function dumpTableSchema($table);
 
+    /**
+     * Dump view schema
+     *
+     * @param  string $view View name
+     * @return string View schema
+     */
     public function dumpViewSchema($view);
 
     /**
@@ -35,7 +74,29 @@ interface ConnectorInterface
      * @return mixed Table data
      */
     public function readTableData($table);
+
+    /**
+     * Run code before dumping data (locking table, etc)
+     *
+     * @param  string $table Table name
+     * @return string Dump
+     */
     public function preDumpTableData($table);
+
+    /**
+     * Dump table data
+     *
+     * @param  string         $table Table name
+     * @param  mixed          $data  Data
+     * @param  StoreInterface $store Store only passed here to ensure data is written
+     */
     public function dumpTableData($table, $data, StoreInterface $store);
+
+    /**
+     * Run code after dumping data (unlocking table, etc)
+     *
+     * @param  string $table Table name
+     * @return string Dump
+     */
     public function postDumpTableData($table);
 }
