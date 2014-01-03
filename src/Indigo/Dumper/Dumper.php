@@ -122,6 +122,18 @@ class Dumper
     }
 
     /**
+     * Set store to a new instance
+     *
+     * @param StoreInterface $store
+     */
+    public function setStore(StoreInterface $store)
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
      * Add included table
      *
      * @param  string $table Table name

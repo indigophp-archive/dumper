@@ -17,7 +17,7 @@ namespace Indigo\Dumper\Store;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class VariableStore implements AbstractStore
+class VariableStore extends AbstractStore
 {
     /**
      * Data
