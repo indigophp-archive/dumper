@@ -1,0 +1,26 @@
+{
+    "name": "indigophp/dumper",
+    "description": "Dump databases to SQL file",
+    "license": "MIT",
+    "keywords": ["dump", "MySQL", "Sqlite" ,"SQL"],
+    "authors": [
+        {
+            "name": "Márk Sági-Kazár",
+            "email": "mark.sagikazar@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">5.3.0",
+        "symfony/options-resolver": "v2.4.0"
+    },
+    "require-dev": {
+        "frenkynet/flysystem": "dev-master",
+        "mockery/mockery": "dev-master@dev"
+    },
+    "suggest": {
+        "frenkynet/flysystem": "Filesystem abstraction layer used for file uploads"
+    },
+    "autoload": {
+        "psr-0": {"Indigo\\Dumper": "src/"}
+    }
+}
