@@ -132,7 +132,7 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function getTables()
     {
-        return array_map(function($item) {
+        return array_map(function ($item) {
             return reset($item);
         }, $this->showObjects());
     }
@@ -142,7 +142,7 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function getViews()
     {
-        return array_map(function($item) {
+        return array_map(function ($item) {
             return reset($item);
         }, $this->showObjects(true));
     }

@@ -65,7 +65,9 @@ class SqliteConnector extends AbstractConnector
     {
         $dump = parent::dumpTableSchema($table);
 
-        $dump .= $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'table' AND `tbl_name` = '$table'")->fetchColumn(0) . ";\n\n";
+        $dump .= $this->pdo->query(
+            "SELECT `sql` FROM sqlite_master WHERE `type` = 'table' AND `tbl_name` = '$table'"
+        )->fetchColumn(0) . ";\n\n";
 
         $dump .= $this->dumpTableIndexes($table);
 
@@ -81,7 +83,9 @@ class SqliteConnector extends AbstractConnector
     protected function dumpTableIndexes($table)
     {
         $dump = '';
-        $indexes = $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'index' AND `tbl_name` = '$table'");
+        $indexes = $this->pdo->query(
+            "SELECT `sql` FROM sqlite_master WHERE `type` = 'index' AND `tbl_name` = '$table'"
+        );
 
         foreach ($indexes as $index) {
             $dump .= reset($index) . ";\n\n";
@@ -97,7 +101,9 @@ class SqliteConnector extends AbstractConnector
     {
         $dump = parent::dumpViewSchema($view);
 
-        $dump .= $this->pdo->query("SELECT `sql` FROM sqlite_master WHERE `type` = 'view' AND `tbl_name` = '$view'")->fetchColumn(0) . ";\n\n";
+        $dump .= $this->pdo->query(
+            "SELECT `sql` FROM sqlite_master WHERE `type` = 'view' AND `tbl_name` = '$view'"
+        )->fetchColumn(0) . ";\n\n";
 
         return $dump;
     }
