@@ -122,6 +122,32 @@ class Dumper
     }
 
     /**
+     * Get database name
+     *
+     * @return string
+     */
+    public function getDatabase()
+    {
+        $database = $this->connector->getDatabase();
+
+        if (!is_string($database)) {
+            throw new \UnexpectedValueException('Invalid database name');
+        }
+
+        return $database;
+    }
+
+    /**
+     * Get Store object
+     *
+     * @return StoreInterface
+     */
+    public function getStore()
+    {
+        return $this->store;
+    }
+
+    /**
      * Set store to a new instance
      *
      * @param StoreInterface $store

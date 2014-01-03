@@ -22,6 +22,13 @@ use Indigo\Dumper\Store\StoreInterface;
 interface ConnectorInterface
 {
     /**
+     * Return database name
+     *
+     * @return string
+     */
+    public function getDatabase();
+
+    /**
      * Get dump header
      *
      * @return string Dump

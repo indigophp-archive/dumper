@@ -10,6 +10,8 @@
 
 namespace Indigo\Dumper\Store;
 
+use Indigo\Dumper\Exception\StoreNotWritableException;
+
 /**
  * Gz Store
  *
@@ -23,13 +25,13 @@ class GzStore extends FileStore
 
     public function __construct($file = null)
     {
-        is_null($file) and $file = tempnam(sys_get_temp_dir(), 'dump_');
-        $this->file = gzopen($file, 'wb9');
+        $this->file = $file ?: tempnam(sys_get_temp_dir(), 'dump_');
+        $this->handle = gzopen($this->file, 'wb9');
     }
 
     public function __destruct()
     {
-        gzclose($this->file);
+        gzclose($this->handle);
     }
 
     /**
@@ -41,6 +43,6 @@ class GzStore extends FileStore
             throw new StoreNotWritableException('Store is not writable');
         }
 
-        return gzwrite($this->file, $data);
+        return gzwrite($this->handle, $data);
     }
 }

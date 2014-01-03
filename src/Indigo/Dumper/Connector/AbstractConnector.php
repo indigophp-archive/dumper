@@ -110,6 +110,14 @@ abstract class AbstractConnector implements ConnectorInterface
     /**
      * {@inheritdoc}
      */
+    public function getDatabase()
+    {
+        return $this->options['database'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getHeader()
     {
         if ($this->options['disable_foreign_keys_check']) {

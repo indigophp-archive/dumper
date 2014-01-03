@@ -23,21 +23,33 @@ use Indigo\Dumper\Exception\StoreNotReadableException;
 class FileStore extends AbstractStore
 {
     /**
-     * File handler
+     * File path
      *
-     * @var resource
+     * @var string
      */
     protected $file;
 
+    /**
+     * File handle
+     *
+     * @var resource
+     */
+    protected $handle;
+
     public function __construct($file = null)
     {
-        is_null($file) and $file = tempnam(sys_get_temp_dir(), 'dump_');
-        $this->file = fopen($file, 'w+');
+        $this->file = $file ?: tempnam(sys_get_temp_dir(), 'dump_');
+        $this->handle = fopen($this->file, 'w+');
     }
 
     public function __destruct()
     {
-        fclose($this->file);
+        fclose($this->handle);
+    }
+
+    public function getFile()
+    {
+        return $this->file;
     }
 
     /**
@@ -49,7 +61,7 @@ class FileStore extends AbstractStore
             throw new StoreNotWritableException('Store is not writable');
         }
 
-        return fwrite($this->file, $data);
+        return fwrite($this->handle, $data);
     }
 
     /**
@@ -61,7 +73,7 @@ class FileStore extends AbstractStore
             throw new StoreNotReadableException('Store is not readable');
         }
 
-        rewind($this->file);
-        return stream_get_contents($this->file);
+        rewind($this->handle);
+        return stream_get_contents($this->handle);
     }
 }
