@@ -58,7 +58,7 @@ abstract class AbstractConnector implements ConnectorInterface
     }
 
     /**
-     * Set default MySQL dump settings
+     * Set default options
      *
      * @param OptionsResolverInterface $resolver
      */

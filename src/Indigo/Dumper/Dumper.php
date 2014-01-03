@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Indigo Dump package.
+ * This file is part of the Indigo Dumper package.
  *
  * (c) IndigoPHP Development Team
  *
@@ -16,12 +16,48 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 
+/**
+ * Dumper
+ *
+ * Executes dump functions, collects data and sends to the store
+ *
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ */
 class Dumper
 {
+    /**
+     * Connector object
+     *
+     * @var ConnectorInterface
+     */
     protected $connector;
+
+    /**
+     * Store object
+     *
+     * @var StoreInterface
+     */
     protected $store;
+
+    /**
+     * Options
+     *
+     * @var array
+     */
     protected $options = array();
+
+    /**
+     * Included/excluded tables
+     *
+     * @var array
+     */
     protected $tables = array();
+
+    /**
+     * Included/excluded views
+     *
+     * @var array
+     */
     protected $views = array();
 
     public function __construct(ConnectorInterface $connector, StoreInterface $store, array $options = array())
@@ -33,7 +69,11 @@ class Dumper
         $this->setDefaultOptions($resolver, true);
         $this->options = $resolver->resolve($options);
     }
-
+    /**
+     * Set default Dumper options
+     *
+     * @param OptionsResolverInterface $resolver
+     */
     protected function setDefaultOptions(OptionsResolverInterface $resolver, $global = false)
     {
         $resolver->setDefaults(array(
@@ -51,6 +91,13 @@ class Dumper
         ));
     }
 
+    /**
+     * Get option
+     *
+     * @param  string $option  Option key
+     * @param  mixed  $default Default value if key is not found
+     * @return mixed Option value
+     */
     public function getOption($option = null, $default = null)
     {
         if (is_null($option)) {
@@ -62,6 +109,13 @@ class Dumper
         }
     }
 
+    /**
+     * Get connector option
+     *
+     * @param  string $option  Option key
+     * @param  mixed  $default Default value if key is not found
+     * @return mixed Option value
+     */
     public function getConnectorOption($option = null, $default = null)
     {
         return $this->connector->getOption($option, $default);
@@ -71,7 +125,7 @@ class Dumper
      * Add included table
      *
      * @param  string $table Table name
-     * @return Dump
+     * @return Dumper
      */
     public function includeTable($table)
     {
@@ -84,7 +138,7 @@ class Dumper
      * Add excluded table
      *
      * @param  string $table Table name
-     * @return Dump
+     * @return Dumper
      */
     public function excludeTable($table)
     {
@@ -98,7 +152,6 @@ class Dumper
      *
      * @param  string  $table Table name
      * @param  boolean $set   Include or exclude database
-     * @return Dump
      */
     protected function setTable($table, $set = true)
     {
@@ -154,7 +207,7 @@ class Dumper
      * Add included view
      *
      * @param  string $view View name
-     * @return Dump
+     * @return Dumper
      */
     public function includeView($view)
     {
@@ -167,7 +220,7 @@ class Dumper
      * Add excluded view
      *
      * @param  string $view View name
-     * @return Dump
+     * @return Dumper
      */
     public function excludeView($view)
     {
@@ -181,7 +234,6 @@ class Dumper
      *
      * @param  string  $view View name
      * @param  boolean $set   Include or exclude database
-     * @return Dump
      */
     protected function setView($view, $set = true)
     {
@@ -236,7 +288,7 @@ class Dumper
     /**
      * Dump database
      *
-     * @return boolean Succes
+     * @return boolean Success
      */
     public function dump()
     {
