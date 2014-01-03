@@ -14,7 +14,8 @@
         "symfony/options-resolver": "v2.4.0"
     },
     "require-dev": {
-        "frenkynet/flysystem": "dev-master"
+        "frenkynet/flysystem": "dev-master",
+        "mockery/mockery": "dev-master@dev"
     },
     "suggest": {
         "frenkynet/flysystem": "Filesystem abstraction layer used for file uploads"
