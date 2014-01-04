@@ -39,11 +39,16 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->dumper = new Dumper($connector, $store);
     }
 
-    public function testSetStore()
+    public function testStore()
     {
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
             $this->dumper->setStore(new VariableStore)
+        );
+
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Store\\StoreInterface',
+            $this->getStore()
         );
     }
 
@@ -54,10 +59,11 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_bool($dump));
     }
 
-    public function testOption()
+    public function testReturn()
     {
         $this->assertEquals(null, $this->dumper->getOption('nothing_here'));
         $this->assertEquals(null, $this->dumper->getConnectorOption('nothing_here'));
+        $this->assertEquals('test', $this->dumper->getDatabase());
     }
 
     public function testIncludeTable()
