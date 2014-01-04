@@ -22,9 +22,13 @@ abstract class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->connector = new MysqlConnector(array(
-            'database' => 'test',
-            'username' => 'travis',
-            'password' => ''
+            'database'                   => 'test',
+            'username'                   => 'travis',
+            'password'                   => '',
+            'drop_table'                 => true,
+            'drop_view'                  => true,
+            'disable_foreign_keys_check' => true,
+            'use_transaction'            => true,
         ));
     }
 }
