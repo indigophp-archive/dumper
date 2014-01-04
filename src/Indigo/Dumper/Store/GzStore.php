@@ -29,11 +29,6 @@ class GzStore extends FileStore
         $this->handle = gzopen($this->file, 'wb9');
     }
 
-    public function __destruct()
-    {
-        gzclose($this->handle);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -44,5 +39,14 @@ class GzStore extends FileStore
         }
 
         return gzwrite($this->handle, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save()
+    {
+        gzclose($this->handle);
+        return parent::save();
     }
 }
