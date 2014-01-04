@@ -25,6 +25,7 @@ Via Composer
 }
 ```
 
+
 ## Usage
 
 ``` php
@@ -70,6 +71,7 @@ $dumper = new Indigo\Dumper\Dumper($connector, $store, $options);
 $dumper->dump('/path/to/file.sql.gz');
 ```
 
+
 ## Advanced usage
 
 Without setting any table/view on dumper, all of them will be dumped. Here is how you can control which table/view should be dumped:
@@ -95,15 +97,22 @@ $dumper->includeView('v_test')->includeView(array('v_test2', 'v_test3'));
 $dumper->excludeView('v_test2');
 ```
 
+## Note
+
+This is **NOT** a replacement of `mysqldump` and other native database dump tools. Big database backups takes a lot time as all tables are dumped row by row.
+
+
 ## Testing
 
 ``` bash
 $ phpunit
 ```
 
+
 ## Contributing
 
 Please see [CONTRIBUTING](https://github.com/indigophp/dumper/blob/develop/CONTRIBUTING.md) for details.
+
 
 ## Credits
 
