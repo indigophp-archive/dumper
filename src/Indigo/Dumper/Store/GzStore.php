@@ -25,7 +25,7 @@ class GzStore extends FileStore
 
     public function __construct($file = null)
     {
-        $this->file = $file ?: tempnam(sys_get_temp_dir(), 'dump_');
+        $this->file = $this->file($file);
         $this->handle = gzopen($this->file, 'wb9');
     }
 

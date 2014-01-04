@@ -38,13 +38,39 @@ class FileStore extends AbstractStore
 
     public function __construct($file = null)
     {
-        $this->file = $file ?: tempnam(sys_get_temp_dir(), 'dump_');
+        $this->file = $this->file($file);
         $this->handle = fopen($this->file, 'w+');
     }
 
+    /**
+     * Get file
+     *
+     * @return string
+     */
     public function getFile()
     {
         return $this->file;
+    }
+
+    /**
+     * Get or create file
+     *
+     * @param  string $name
+     * @return string
+     */
+    protected function file($name)
+    {
+        if ($path = dirname($name) and $path !== '.') {
+            $path = realpath($path);
+        } else {
+            $path = sys_get_temp_dir();
+        }
+
+        if ($name = basename($name)) {
+            return $path  . '/' . $name;
+        } else {
+            return tempnam($path, 'dump_');
+        }
     }
 
     /**
