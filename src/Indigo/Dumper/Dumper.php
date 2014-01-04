@@ -77,7 +77,7 @@ class Dumper
 
         $resolver = new OptionsResolver();
         $this->setDefaultOptions($resolver, true);
-        $this->options $resolver->resolve($options);
+        $this->options = $resolver->resolve($options);
     }
 
     /**
