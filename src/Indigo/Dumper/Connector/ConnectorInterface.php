@@ -75,7 +75,7 @@ interface ConnectorInterface
     /**
      * Read all data from table if any
      *
-     * This function should check for data and return false if empty
+     * This function should check for data and return array() if empty
      *
      * @param  string $table
      * @return mixed  Table data

@@ -226,7 +226,7 @@ abstract class AbstractConnector implements ConnectorInterface
     {
         $data = $this->pdo->query("SELECT * FROM `$table`", PDO::FETCH_NUM);
 
-        return $data->rowCount() > 0 ? $data : false;
+        return $data->rowCount() > 0 ? $data : array();
     }
 
     /**
