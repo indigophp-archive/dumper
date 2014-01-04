@@ -10,9 +10,6 @@
 
 namespace Indigo\Dumper\Store;
 
-use Indigo\Dumper\Exception\StoreNotWritableException;
-use Indigo\Dumper\Exception\StoreNotReadableException;
-
 /**
  * File Store
  *
@@ -83,10 +80,7 @@ class FileStore extends AbstractStore
      */
     public function write($data)
     {
-        if (!$this->writable) {
-            throw new StoreNotWritableException('Store is not writable');
-        }
-
+        parent::write($data);
         return fwrite($this->handle, $data);
     }
 
@@ -95,10 +89,7 @@ class FileStore extends AbstractStore
      */
     public function read()
     {
-        if (!$this->readable) {
-            throw new StoreNotReadableException('Store is not readable');
-        }
-
+        parent::read();
         rewind($this->handle);
 
         return stream_get_contents($this->handle);
