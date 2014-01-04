@@ -45,6 +45,21 @@ class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testInstance()
+    {
+        $connector = new MysqlConnector(array(
+            'database'                   => 'test',
+            'username'                   => 'travis',
+            'password'                   => '',
+            'drop_table'                 => true,
+            'drop_view'                  => true,
+            'disable_foreign_keys_check' => true,
+            'use_transaction'            => true,
+        ));
+
+        $this->assertInstanceOf('Indigo\\Dumper\\Connector\\MysqlConnector', $connector);
+    }
+
     /**
      * @dataProvider provider
      */

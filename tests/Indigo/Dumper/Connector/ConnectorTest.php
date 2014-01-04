@@ -19,7 +19,7 @@ abstract class ConnectorTest extends \PHPUnit_Framework_TestCase
 {
     protected $connectors = array();
 
-    abstract protected function provider();
+    abstract public function provider();
 
     /**
      * @dataProvider provider

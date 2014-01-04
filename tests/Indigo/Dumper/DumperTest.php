@@ -147,10 +147,10 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
-            $dumper->excludeTable(array('test'))
+            $dumper->excludeTable(array('test2'))
         );
 
-        $this->assertTrue($dumper->isTableExcluded('test'));
+        $this->assertTrue($dumper->isTableExcluded('test2'));
     }
 
     /**
@@ -184,10 +184,10 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
-            $dumper->excludeView(array('v_test'))
+            $dumper->excludeView(array('v_test2'))
         );
 
-        $this->assertTrue($dumper->isViewExcluded('v_test'));
+        $this->assertTrue($dumper->isViewExcluded('v_test2'));
     }
 
     /**
