@@ -48,7 +48,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Store\\StoreInterface',
-            $this->getStore()
+            $this->dumper->getStore()
         );
     }
 
