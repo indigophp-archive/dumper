@@ -47,6 +47,7 @@ class GzStore extends FileStore
     public function save()
     {
         gzclose($this->handle);
+
         return parent::save();
     }
 }

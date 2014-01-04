@@ -37,6 +37,7 @@ class SqliteConnector extends AbstractConnector
     protected function showObjects($view = false)
     {
         $type = $view ? 'view' : 'table';
+
         return $this->pdo->query("SELECT tbl_name FROM sqlite_master WHERE type='$type'")->fetchAll();
     }
 

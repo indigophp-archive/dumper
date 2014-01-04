@@ -53,6 +53,7 @@ class FlysystemStore implements AbstractStore
         }
 
         $this->filesystem->put($this->name, $data);
+
         return strlen($data);
     }
 

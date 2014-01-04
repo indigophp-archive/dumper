@@ -78,7 +78,7 @@ interface ConnectorInterface
      * This function should check for data and return false if empty
      *
      * @param  string $table
-     * @return mixed Table data
+     * @return mixed  Table data
      */
     public function readTableData($table);
 
@@ -93,9 +93,9 @@ interface ConnectorInterface
     /**
      * Dump table data
      *
-     * @param  string         $table Table name
-     * @param  mixed          $data  Data
-     * @param  StoreInterface $store Store only passed here to ensure data is written
+     * @param string         $table Table name
+     * @param mixed          $data  Data
+     * @param StoreInterface $store Store only passed here to ensure data is written
      */
     public function dumpTableData($table, $data, StoreInterface $store);
 

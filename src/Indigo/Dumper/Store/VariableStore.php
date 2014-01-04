@@ -39,6 +39,7 @@ class VariableStore extends AbstractStore
         }
 
         $this->data .= $data;
+
         return strlen($data);
     }
 

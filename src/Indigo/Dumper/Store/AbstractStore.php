@@ -78,6 +78,7 @@ class AbstractStore implements StoreInterface
     public function save()
     {
         $this->writable = false;
+
         return true;
     }
 }

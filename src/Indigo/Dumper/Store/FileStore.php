@@ -100,6 +100,7 @@ class FileStore extends AbstractStore
         }
 
         rewind($this->handle);
+
         return stream_get_contents($this->handle);
     }
 }

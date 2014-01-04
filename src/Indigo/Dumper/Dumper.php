@@ -88,7 +88,7 @@ class Dumper
      *
      * @param  string $option  Option key
      * @param  mixed  $default Default value if key is not found
-     * @return mixed Option value
+     * @return mixed  Option value
      */
     public function getOption($option = null, $default = null)
     {
@@ -106,7 +106,7 @@ class Dumper
      *
      * @param  string $option  Option key
      * @param  mixed  $default Default value if key is not found
-     * @return mixed Option value
+     * @return mixed  Option value
      */
     public function getConnectorOption($option = null, $default = null)
     {
@@ -180,8 +180,8 @@ class Dumper
     /**
      * Set table include/exclude
      *
-     * @param  string  $table Table name
-     * @param  boolean $set   Include or exclude database
+     * @param string  $table Table name
+     * @param boolean $set   Include or exclude database
      */
     protected function setTable($table, $set = true)
     {
@@ -262,8 +262,8 @@ class Dumper
     /**
      * Set view include/exclude
      *
-     * @param  string  $view View name
-     * @param  boolean $set   Include or exclude database
+     * @param string  $view View name
+     * @param boolean $set  Include or exclude database
      */
     protected function setView($view, $set = true)
     {
@@ -360,7 +360,7 @@ class Dumper
     /**
      * Dump table data
      *
-     * @param  string $table
+     * @param string $table
      */
     protected function dumpTableData($table)
     {

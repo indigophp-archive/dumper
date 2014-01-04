@@ -47,13 +47,14 @@ abstract class AbstractConnector implements ConnectorInterface
     /**
      * Resolve options
      *
-     * @param  array  $options
+     * @param  array $options
      * @return array Resolved options
      */
     protected function resolveOptions(array $options = array())
     {
         $resolver = new OptionsResolver();
         $this->setDefaultOptions($resolver);
+
         return $this->options = $resolver->resolve($options);
     }
 
@@ -94,7 +95,7 @@ abstract class AbstractConnector implements ConnectorInterface
      *
      * @param  string $option  Option key
      * @param  mixed  $default Default value if key is not found
-     * @return mixed Option value
+     * @return mixed  Option value
      */
     public function getOption($option = null, $default = null)
     {
