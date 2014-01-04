@@ -60,6 +60,13 @@ class Dumper
      */
     protected $views = array();
 
+    /**
+     * Dumper constructor
+     *
+     * @param ConnectorInterface $connector
+     * @param StoreInterface     $store
+     * @param array              $options
+     */
     public function __construct(ConnectorInterface $connector, StoreInterface $store, array $options = array())
     {
         $this->connector = $connector;
@@ -69,6 +76,7 @@ class Dumper
         $this->setDefaultOptions($resolver, true);
         $this->options = $resolver->resolve($options);
     }
+
     /**
      * Set default Dumper options
      *
