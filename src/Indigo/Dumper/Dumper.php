@@ -74,14 +74,10 @@ class Dumper
     ) {
         $this->connector = $connector;
         $this->store = $store;
-        $this->options = $this->resolve($options);
-    }
 
-    protected function resolve(array $options = array())
-    {
         $resolver = new OptionsResolver();
         $this->setDefaultOptions($resolver, true);
-        return $resolver->resolve($options);
+        $this->options $resolver->resolve($options);
     }
 
     /**
