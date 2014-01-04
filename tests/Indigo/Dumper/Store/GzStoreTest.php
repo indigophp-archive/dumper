@@ -15,7 +15,7 @@ namespace Indigo\Dumper\Store;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class GzStoreTest extends StoreTest
+class GzStoreTest extends FileStoreTest
 {
     public function setUp()
     {

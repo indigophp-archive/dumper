@@ -21,4 +21,9 @@ class FileStoreTest extends StoreTest
     {
         $this->store = new FileStore;
     }
+
+    public function testFile()
+    {
+        $this->assertFileExists($this->store->getFile());
+    }
 }
