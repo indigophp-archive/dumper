@@ -17,16 +17,21 @@ namespace Indigo\Dumper\Connector;
  */
 abstract class ConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected $connector;
+    protected $connectors = array();
 
-    public function testValidReturns()
+    abstract protected function provider();
+
+    /**
+     * @dataProvider provider
+     */
+    public function testValidReturns($connector)
     {
-        $this->assertTrue(is_array($this->connector->getTables()));
-        $this->assertTrue(is_array($this->connector->getViews()));
-        $this->assertTrue(is_string($this->connector->getDatabase()));
-        $this->assertNull($this->connector->getOption('nothing_here'));
+        $this->assertTrue(is_array($connector->getTables()));
+        $this->assertTrue(is_array($connector->getViews()));
+        $this->assertTrue(is_string($connector->getDatabase()));
+        $this->assertNull($connector->getOption('nothing_here'));
 
-        $data = $this->connector->readTableData('nothing');
+        $data = $connector->readTableData('nothing');
 
         if (!is_array($data)) {
             $this->assertInstanceOf('Traversable', $data);

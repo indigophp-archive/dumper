@@ -15,25 +15,41 @@ namespace Indigo\Dumper\Connector;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-abstract class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
+class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected $connector;
-
-    public function setUp()
+    public function provider()
     {
-        $this->connector = new MysqlConnector(array(
-            'database'                   => 'test',
-            'username'                   => 'travis',
-            'password'                   => '',
-            'drop_table'                 => true,
-            'drop_view'                  => true,
-            'disable_foreign_keys_check' => true,
-            'use_transaction'            => true,
-        ));
+        return array(
+            array(
+                new MysqlConnector(array(
+                    'database'                   => 'test',
+                    'username'                   => 'travis',
+                    'password'                   => '',
+                    'drop_table'                 => true,
+                    'drop_view'                  => true,
+                    'disable_foreign_keys_check' => true,
+                    'use_transaction'            => true,
+                ))
+            ),
+            array(
+                new MysqlConnector(array(
+                    'database'                   => 'test',
+                    'username'                   => 'travis',
+                    'password'                   => '',
+                    'drop_table'                 => false,
+                    'drop_view'                  => false,
+                    'disable_foreign_keys_check' => false,
+                    'use_transaction'            => false,
+                ))
+            )
+        );
     }
 
-    public function testValidReturns()
+    /**
+     * @dataProvider provider
+     */
+    public function testValidReturns($connector)
     {
-        $this->assertEquals('test', $this->connector->getDatabase());
+        $this->assertEquals('test', $connector->getDatabase());
     }
 }
