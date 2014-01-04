@@ -130,15 +130,6 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      */
     public function testIncludeTable($dumper)
     {
-        $this->assertFalse($dumper->hasTable());
-
-        $this->assertInstanceOf(
-            'Indigo\\Dumper\\Dumper',
-            $dumper->excludeTable(array('test2'))
-        );
-
-        $this->assertTrue($dumper->isTableExcluded('test2'));
-
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
             $dumper->includeTable('test')
@@ -147,6 +138,19 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($dumper->isTableIncluded('test'));
 
         $this->assertTrue($dumper->hasTable());
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testExcludeTable($dumper)
+    {
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Dumper',
+            $dumper->excludeTable(array('test'))
+        );
+
+        $this->assertTrue($dumper->isTableExcluded('test'));
     }
 
     /**
@@ -163,15 +167,6 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      */
     public function testIncludeView($dumper)
     {
-        $this->assertFalse($dumper->hasView());
-
-        $this->assertInstanceOf(
-            'Indigo\\Dumper\\Dumper',
-            $dumper->excludeView(array('v_test2'))
-        );
-
-        $this->assertTrue($dumper->isViewExcluded('v_test2'));
-
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
             $dumper->includeView('v_test')
@@ -180,6 +175,19 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($dumper->isViewIncluded('v_test'));
 
         $this->assertTrue($dumper->hasView());
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testExcludeView($dumper)
+    {
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Dumper',
+            $dumper->excludeView(array('v_test'))
+        );
+
+        $this->assertTrue($dumper->isViewExcluded('v_test'));
     }
 
     /**
