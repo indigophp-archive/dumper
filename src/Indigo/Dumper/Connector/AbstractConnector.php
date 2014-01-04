@@ -118,7 +118,7 @@ abstract class AbstractConnector implements ConnectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getHeader()
+    public function dumpHeader()
     {
         if ($this->options['disable_foreign_keys_check']) {
             return $this->dumpDisableForeignKeysCheck();
@@ -128,7 +128,7 @@ abstract class AbstractConnector implements ConnectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getFooter()
+    public function dumpFooter()
     {
         if ($this->options['disable_foreign_keys_check']) {
             return $this->dumpEnableForeignKeysCheck();

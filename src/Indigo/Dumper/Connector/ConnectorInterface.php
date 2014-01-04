@@ -29,20 +29,6 @@ interface ConnectorInterface
     public function getDatabase();
 
     /**
-     * Get dump header
-     *
-     * @return string Dump
-     */
-    public function getHeader();
-
-    /**
-     * Get dump footer
-     *
-     * @return string Dump
-     */
-    public function getFooter();
-
-    /**
      * Get list of tables
      *
      * @return array
@@ -55,6 +41,20 @@ interface ConnectorInterface
      * @return array
      */
     public function getViews();
+
+    /**
+     * Get dump header
+     *
+     * @return string Dump
+     */
+    public function dumpHeader();
+
+    /**
+     * Get dump footer
+     *
+     * @return string Dump
+     */
+    public function dumpFooter();
 
     /**
      * Dump table schema

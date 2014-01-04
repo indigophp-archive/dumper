@@ -86,9 +86,9 @@ class MysqlConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function getHeader()
+    public function dumpHeader()
     {
-        $header = parent::getHeader();
+        $header = parent::dumpHeader();
 
         if ($this->options['drop_database']) {
             $header .= $this->dumpAddDropDatabase();

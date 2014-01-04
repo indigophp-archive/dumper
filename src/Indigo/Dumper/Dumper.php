@@ -331,7 +331,7 @@ class Dumper
     public function dump()
     {
         $this->write($this->options['header']);
-        $this->write($this->connector->getHeader());
+        $this->write($this->connector->dumpHeader());
 
         if ($this->options['tables']) {
             $this->dumpTables();
@@ -341,7 +341,7 @@ class Dumper
             $this->dumpViews();
         }
 
-        $this->write($this->connector->getFooter());
+        $this->write($this->connector->dumpFooter());
 
         return $this->store->save();
     }
