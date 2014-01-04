@@ -11,6 +11,7 @@
 namespace Indigo\Dumper;
 
 use Indigo\Dumper\Connector\SqliteConnector;
+use Indigo\Dumper\Connector\MysqlConnector;
 use Indigo\Dumper\Store\VariableStore;
 
 /**
@@ -41,6 +42,34 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                 new Dumper(
                     new SqliteConnector(array(
                         'database'                   => __DIR__ . '/../../test.sqlite',
+                        'drop_table'                 => false,
+                        'drop_view'                  => false,
+                        'disable_foreign_keys_check' => false,
+                        'use_transaction'            => false,
+                    )),
+                    new VariableStore
+                )
+            ),
+            array(
+                new Dumper(
+                    new MysqlConnector(array(
+                        'database'                   => 'test',
+                        'username'                   => 'travis',
+                        'password'                   => '',
+                        'drop_table'                 => true,
+                        'drop_view'                  => true,
+                        'disable_foreign_keys_check' => true,
+                        'use_transaction'            => true,
+                    )),
+                    new VariableStore
+                )
+            ),
+            array(
+                new Dumper(
+                    new MysqlConnector(array(
+                        'database'                   => 'test',
+                        'username'                   => 'travis',
+                        'password'                   => '',
                         'drop_table'                 => false,
                         'drop_view'                  => false,
                         'disable_foreign_keys_check' => false,
