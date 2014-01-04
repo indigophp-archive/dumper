@@ -67,14 +67,21 @@ class Dumper
      * @param StoreInterface     $store
      * @param array              $options
      */
-    public function __construct(ConnectorInterface $connector, StoreInterface $store, array $options = array())
-    {
+    public function __construct(
+        ConnectorInterface $connector,
+        StoreInterface $store,
+        array $options = array()
+    ) {
         $this->connector = $connector;
         $this->store = $store;
+        $this->options = $this->resolve($options);
+    }
 
+    protected function resolve(array $options = array())
+    {
         $resolver = new OptionsResolver();
         $this->setDefaultOptions($resolver, true);
-        $this->options = $resolver->resolve($options);
+        return $resolver->resolve($options);
     }
 
     /**
