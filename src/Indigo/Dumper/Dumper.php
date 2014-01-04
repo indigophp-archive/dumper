@@ -77,14 +77,6 @@ class Dumper
     protected function setDefaultOptions(OptionsResolverInterface $resolver, $global = false)
     {
         $resolver->setDefaults(array(
-            'header' => "-- Indigo SQL Dump\n" .
-                "-- https://github.com/indigophp/dump\n" .
-                "--\n" .
-                "-- Host: {$this->getConnectorOption('host', gethostname())}\n" .
-                "-- Generation Time: " . date('r') . "\n\n" .
-                "--\n" .
-                "-- Database: `{$this->getConnectorOption('database')}`\n" .
-                "--\n\n",
             'tables'  => true,
             'no_data' => false,
             'views'   => true,
@@ -330,7 +322,6 @@ class Dumper
      */
     public function dump()
     {
-        $this->write($this->options['header']);
         $this->write($this->connector->dumpHeader());
 
         if ($this->options['tables']) {

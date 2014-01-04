@@ -120,9 +120,20 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function dumpHeader()
     {
+        $dump = "-- Indigo SQL Dump\n" .
+                "-- https://github.com/indigophp/dump\n" .
+                "--\n" .
+                "-- Host: {$this->getConnectorOption('host', gethostname())}\n" .
+                "-- Generation Time: " . date('r') . "\n\n" .
+                "--\n" .
+                "-- Database: `{$this->getConnectorOption('database')}`\n" .
+                "--\n\n";
+
         if ($this->options['disable_foreign_keys_check']) {
-            return $this->dumpDisableForeignKeysCheck();
+            $dump .= $this->dumpDisableForeignKeysCheck();
         }
+
+        return $dump;
     }
 
     /**
