@@ -24,6 +24,12 @@ abstract class ConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($this->connector->getTables()));
         $this->assertTrue(is_array($this->connector->getViews()));
         $this->assertTrue(is_string($this->connector->getDatabase()));
-        $this->assertEquals('test', $this->connector->getDatabase());
+        $this->assertNull($this->connector->getOption('nothing_here'));
+
+        $data = $this->connector->readTableData('nothing');
+
+        if (!is_array($data)) {
+            $this->assertInstanceOf('Traversable', $data);
+        }
     }
 }

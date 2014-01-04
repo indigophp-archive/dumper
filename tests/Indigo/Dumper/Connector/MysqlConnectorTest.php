@@ -31,4 +31,9 @@ abstract class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
             'use_transaction'            => true,
         ));
     }
+
+    public function testValidReturns()
+    {
+        $this->assertEquals('test', $this->connector->getDatabase());
+    }
 }

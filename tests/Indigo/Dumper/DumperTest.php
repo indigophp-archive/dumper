@@ -61,9 +61,9 @@ class DumperTest extends \PHPUnit_Framework_TestCase
 
     public function testReturn()
     {
-        $this->assertEquals(null, $this->dumper->getOption('nothing_here'));
-        $this->assertEquals(null, $this->dumper->getConnectorOption('nothing_here'));
-        $this->assertEquals('test', $this->dumper->getDatabase());
+        $this->assertNull($this->dumper->getOption('nothing_here'));
+        $this->assertNull($this->dumper->getConnectorOption('nothing_here'));
+        $this->assertTrue(is_string($this->dumper->getDatabase()));
     }
 
     public function testIncludeTable()
