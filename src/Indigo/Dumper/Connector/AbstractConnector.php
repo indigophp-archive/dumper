@@ -123,10 +123,10 @@ abstract class AbstractConnector implements ConnectorInterface
         $dump = "-- Indigo SQL Dump\n" .
                 "-- https://github.com/indigophp/dump\n" .
                 "--\n" .
-                "-- Host: {$this->getConnectorOption('host', gethostname())}\n" .
+                "-- Host: {$this->getOption('host', gethostname())}\n" .
                 "-- Generation Time: " . date('r') . "\n\n" .
                 "--\n" .
-                "-- Database: `{$this->getConnectorOption('database')}`\n" .
+                "-- Database: `{$this->getOption('database')}`\n" .
                 "--\n\n";
 
         if ($this->options['disable_foreign_keys_check']) {
