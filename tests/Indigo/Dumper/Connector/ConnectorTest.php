@@ -24,5 +24,6 @@ abstract class ConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($this->connector->getTables()));
         $this->assertTrue(is_array($this->connector->getViews()));
         $this->assertTrue(is_string($this->connector->getDatabase()));
+        $this->assertEquals('test', $this->connector->getDatabase());
     }
 }
