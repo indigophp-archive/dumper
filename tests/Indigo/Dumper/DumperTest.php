@@ -20,6 +20,8 @@ use Indigo\Dumper\Store\VariableStore;
  */
 class DumperTest extends \PHPUnit_Framework_TestCase
 {
+    protected $dumper;
+
     public function provider()
     {
         return array(
@@ -50,14 +52,37 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
+    public function testInstance()
+    {
+        $connector = \Mockery::mock('Indigo\\Dumper\\Connector\\ConnectorInterface');
+        $store = \Mockery::mock('Indigo\\Dumper\\Store\\StoreInterface', function ($mock) {
+            $mock->shouldReceive('getFile')
+                ->andReturn(tempnam(sys_get_temp_dir(), ''));
+        });
+
+        $dumper = new Dumper($connector, $store);
+
+        $this->assertInstanceOf('Indigo\\Dumper\\Dumper', $dumper);
+    }
+
     /**
      * @dataProvider provider
      */
     public function testStore($dumper)
     {
+        $store = \Mockery::mock('Indigo\\Dumper\\Store\\StoreInterface', function ($mock) {
+            $mock->shouldReceive('getFile')
+                ->andReturn(tempnam(sys_get_temp_dir(), ''));
+        });
+
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
-            $dumper->setStore(new VariableStore)
+            $dumper->setStore($store)
         );
 
         $this->assertInstanceOf(
@@ -71,6 +96,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      */
     public function testDump($dumper)
     {
+        $dumper->includeTable('test')->includeView('v_test');
         $this->assertTrue($dumper->getStore()->isWritable());
         $this->assertTrue(is_bool($dumper->dump()));
         $this->assertFalse($dumper->getStore()->isWritable());
@@ -94,6 +120,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($dumper->getOption('nothing_here'));
         $this->assertNull($dumper->getConnectorOption('nothing_here'));
+        $this->assertTrue(is_bool($dumper->getOption('no_data')));
+        $this->assertTrue(is_array($dumper->getOption()));
         $this->assertTrue(is_string($dumper->getDatabase()));
     }
 
@@ -107,6 +135,11 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
             $dumper->excludeTable('test2')
+        );
+
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Dumper',
+            $dumper->excludeTable(array('test2'))
         );
 
         $this->assertFalse($dumper->hasTable());
@@ -124,6 +157,15 @@ class DumperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provider
+     * @expectedException InvalidArgumentException
+     */
+    public function testIncludeTableFailure($dumper)
+    {
+        $dumper->includeTable(null);
+    }
+
+    /**
+     * @dataProvider provider
      */
     public function testIncludeView($dumper)
     {
@@ -132,6 +174,11 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Dumper',
             $dumper->excludeView('v_test2')
+        );
+
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Dumper',
+            $dumper->excludeView(array('test2'))
         );
 
         $this->assertFalse($dumper->hasView());
@@ -145,5 +192,14 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($dumper->isViewIncluded('v_test'));
 
         $this->assertTrue($dumper->hasView());
+    }
+
+    /**
+     * @dataProvider provider
+     * @expectedException InvalidArgumentException
+     */
+    public function testIncludeViewFailure($dumper)
+    {
+        $dumper->includeView(null);
     }
 }

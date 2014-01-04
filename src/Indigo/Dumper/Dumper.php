@@ -120,13 +120,7 @@ class Dumper
      */
     public function getDatabase()
     {
-        $database = $this->connector->getDatabase();
-
-        if (!is_string($database)) {
-            throw new \UnexpectedValueException('Invalid database name');
-        }
-
-        return $database;
+        return $this->connector->getDatabase();
     }
 
     /**
