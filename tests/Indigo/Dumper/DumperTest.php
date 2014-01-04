@@ -54,9 +54,17 @@ class DumperTest extends \PHPUnit_Framework_TestCase
 
     public function testDump()
     {
-        $dump = $this->dumper->dump();
+        $this->assertTrue($this->dumper->getStore()->isWritable());
+        $this->assertTrue(is_bool($this->dumper->dump()));
+        $this->assertFalse($this->dumper->getStore()->isWritable());
+    }
 
-        $this->assertTrue(is_bool($dump));
+    public function testRead()
+    {
+        $this->assertTrue($this->dumper->getStore()->isReadable());
+
+        $read = $this->dumper->read();
+        $this->assertTrue(is_string($read) or is_null($read));
     }
 
     public function testReturn()
