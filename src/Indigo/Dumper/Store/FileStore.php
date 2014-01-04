@@ -42,6 +42,11 @@ class FileStore extends AbstractStore
         $this->handle = fopen($this->file, 'w+');
     }
 
+    public function __destruct()
+    {
+        @fclose($this->handle);
+    }
+
     /**
      * Get file
      *
@@ -96,14 +101,5 @@ class FileStore extends AbstractStore
 
         rewind($this->handle);
         return stream_get_contents($this->handle);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function save()
-    {
-        @fclose($this->handle);
-        return parent::save();
     }
 }
