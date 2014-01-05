@@ -61,6 +61,19 @@ class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException PDOException
+     */
+    public function testUnixPath()
+    {
+        $connector = new MysqlConnector(array(
+            'database'                   => 'test',
+            'username'                   => 'travis',
+            'password'                   => '',
+            'unix_socket'                => '/path/to/socket',
+        ));
+    }
+
+    /**
      * @dataProvider provider
      */
     public function testValidReturns($connector)

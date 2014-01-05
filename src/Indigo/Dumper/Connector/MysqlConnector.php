@@ -20,6 +20,11 @@ use PDO;
  */
 class MysqlConnector extends AbstractConnector
 {
+    /**
+     * MySQL Connector constructor
+     *
+     * @param array $options
+     */
     public function __construct(array $options)
     {
         $options = $this->resolveOptions($options);
