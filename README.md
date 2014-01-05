@@ -67,8 +67,7 @@ $options = array(
 
 $dumper = new Indigo\Dumper\Dumper($connector, $store, $options);
 
-// returns file path
-$dumper->dump('/path/to/file.sql.gz');
+$dumper->dump();
 ```
 
 
