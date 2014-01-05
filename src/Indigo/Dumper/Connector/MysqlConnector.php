@@ -206,12 +206,14 @@ class MysqlConnector extends AbstractConnector
      */
     public function postDumpTableData($table)
     {
+        $dump = '';
+
         if ($this->options['use_lock']) {
             $this->pdo->exec('UNLOCK TABLES');
         }
 
         if ($this->options['lock_table']) {
-            $dump = "UNLOCK TABLES;\n";
+            $dump .= "UNLOCK TABLES;\n";
         }
 
         $dump .= parent::postDumpTableData($table);
