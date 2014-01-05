@@ -62,9 +62,9 @@ abstract class AbstractStore implements StoreInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Check whether store is readable
      */
-    public function read()
+    protected function checkReadable()
     {
         if (!$this->readable) {
             throw new StoreNotReadableException('Store is not readable');

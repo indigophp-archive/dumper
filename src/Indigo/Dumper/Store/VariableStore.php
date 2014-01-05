@@ -42,7 +42,7 @@ class VariableStore extends AbstractStore
      */
     public function read()
     {
-        parent::read();
+        $this->checkReadable();
 
         return $this->data;
     }

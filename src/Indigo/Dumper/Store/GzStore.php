@@ -39,12 +39,20 @@ class GzStore extends FileStore
         return gzwrite($this->handle, $data);
     }
 
+    public function read()
+    {
+        $this->checkReadable();
+
+        return gzdecode(file_get_contents($this->file));
+    }
+
     /**
      * {@inheritdoc}
      */
     public function save()
     {
         gzclose($this->handle);
+        $this->readable = true;
 
         return parent::save();
     }

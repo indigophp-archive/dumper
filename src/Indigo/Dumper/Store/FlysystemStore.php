@@ -57,7 +57,7 @@ class FlysystemStore extends AbstractStore
      */
     public function read()
     {
-        parent::read();
+        $this->checkReadable();
 
         return $this->filesystem->read($this->name);
     }

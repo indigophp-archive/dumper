@@ -90,7 +90,7 @@ class FileStore extends AbstractStore
      */
     public function read()
     {
-        parent::read();
+        $this->checkReadable();
         rewind($this->handle);
 
         return stream_get_contents($this->handle);
