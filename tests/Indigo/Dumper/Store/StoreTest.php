@@ -47,7 +47,7 @@ abstract class StoreTest extends \PHPUnit_Framework_TestCase
     /**
      * Should not be writable after save
      *
-     * @expectedException Indigo\Dumper\Exception\StoreNotWritableException
+     * @expectedException OverflowException
      */
     public function testSave()
     {

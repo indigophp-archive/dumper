@@ -46,7 +46,7 @@ class FlysystemStore extends AbstractStore
      */
     public function write($data)
     {
-        parent::write($data);
+        $this->checkWritable();
         $this->filesystem->put($this->name, $data);
 
         return strlen($data);

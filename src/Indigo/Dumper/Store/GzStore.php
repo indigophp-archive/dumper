@@ -34,9 +34,7 @@ class GzStore extends FileStore
      */
     public function write($data)
     {
-        if (!$this->writable) {
-            throw new StoreNotWritableException('Store is not writable');
-        }
+        $this->checkWritable();
 
         return gzwrite($this->handle, $data);
     }

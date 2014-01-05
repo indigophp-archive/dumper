@@ -80,7 +80,7 @@ class FileStore extends AbstractStore
      */
     public function write($data)
     {
-        parent::write($data);
+        $this->checkWritable();
 
         return fwrite($this->handle, $data);
     }

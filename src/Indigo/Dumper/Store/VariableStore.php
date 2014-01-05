@@ -31,7 +31,7 @@ class VariableStore extends AbstractStore
      */
     public function write($data)
     {
-        parent::write($data);
+        $this->checkWritable();
         $this->data .= $data;
 
         return strlen($data);

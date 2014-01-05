@@ -10,7 +10,6 @@
 
 namespace Indigo\Dumper\Store;
 
-use Indigo\Dumper\Exception\StoreNotWritableException;
 use Indigo\Dumper\Exception\StoreNotReadableException;
 
 /**
@@ -53,12 +52,12 @@ abstract class AbstractStore implements StoreInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Check whether store is writable
      */
-    public function write($data)
+    protected function checkWritable()
     {
         if (!$this->writable) {
-            throw new StoreNotWritableException('Store is not writable');
+            throw new \OverflowException('Store is not writable');
         }
     }
 
