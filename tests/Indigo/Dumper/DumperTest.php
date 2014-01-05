@@ -125,6 +125,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      */
     public function testDump($dumper)
     {
+        $dumper->includeTable('test')->includeView('v_test');
         $this->assertTrue($dumper->getStore()->isWritable());
         $this->assertTrue(is_bool($dumper->dump()));
         $this->assertFalse($dumper->getStore()->isWritable());
