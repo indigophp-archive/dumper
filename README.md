@@ -1,8 +1,8 @@
 # Indigo Dumper
 
 [![Build Status](https://travis-ci.org/indigophp/dumper.png?branch=develop)](https://travis-ci.org/indigophp/dumper)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/indigophp/dumper/badges/quality-score.png?s=67092d22b834c80f6cd14300c7a57f8d099c6b07)](https://scrutinizer-ci.com/g/indigophp/dumper/)
-[![Code Coverage](https://scrutinizer-ci.com/g/indigophp/dumper/badges/coverage.png?s=794fee9a844c2f9ee7db2cd3f6f66864c81e0926)](https://scrutinizer-ci.com/g/indigophp/dumper/)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/indigophp/dumper/badges/quality-score.png?s=3b148881bd268728b4ad09f43adfeffdf83b3c3d)](https://scrutinizer-ci.com/g/indigophp/dumper/)
+[![Code Coverage](https://scrutinizer-ci.com/g/indigophp/dumper/badges/coverage.png?s=766b57841ef96ca7ff894ef1455e74723cdeef01)](https://scrutinizer-ci.com/g/indigophp/dumper/)
 
 **Dump databases to SQL file and store it where you want**
 
