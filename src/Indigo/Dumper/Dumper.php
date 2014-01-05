@@ -274,7 +274,7 @@ class Dumper
      * Set object include/exclude
      *
      * @param string  $object  Object name
-     * @param array   $objects  Objects
+     * @param array   $objects Objects
      * @param boolean $value   Include or exclude object
      */
     protected function setObject($object, & $objects, $value = true)
