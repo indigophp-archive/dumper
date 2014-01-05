@@ -23,35 +23,33 @@ class GzStore extends FileStore
 
     public function __construct($file = null)
     {
-        $this->file = $this->file($file);
+        $this->file = $this->makeFile($file);
         $this->handle = gzopen($this->file, 'wb9');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write($data)
+    protected function doWrite($data)
     {
-        $this->checkWritable();
-
         return gzwrite($this->handle, $data);
     }
 
-    public function read()
+    /**
+     * {@inheritdoc}
+     */
+    protected function doRead()
     {
-        $this->checkReadable();
-
         return gzdecode(file_get_contents($this->file));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function save()
+    protected function doSave()
     {
-        gzclose($this->handle);
         $this->readable = true;
 
-        return parent::save();
+        return gzclose($this->handle);
     }
 }
