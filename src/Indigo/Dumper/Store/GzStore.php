@@ -10,8 +10,6 @@
 
 namespace Indigo\Dumper\Store;
 
-use Indigo\Dumper\Exception\StoreNotWritableException;
-
 /**
  * Gz Store
  *
