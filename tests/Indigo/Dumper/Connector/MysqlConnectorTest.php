@@ -15,7 +15,7 @@ namespace Indigo\Dumper\Connector;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
+class MysqlConnectorTest extends ConnectorTest
 {
     public function provider()
     {

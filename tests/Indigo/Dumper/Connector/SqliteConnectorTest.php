@@ -15,7 +15,7 @@ namespace Indigo\Dumper\Connector;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class SqliteConnectorTest extends \PHPUnit_Framework_TestCase
+class SqliteConnectorTest extends ConnectorTest
 {
     public function provider()
     {
