@@ -113,18 +113,6 @@ class Dumper
     }
 
     /**
-     * Get connector option
-     *
-     * @param  string $option  Option key
-     * @param  mixed  $default Default value if key is not found
-     * @return mixed  Option value
-     */
-    public function getConnectorOption($option = null, $default = null)
-    {
-        return $this->connector->getOption($option, $default);
-    }
-
-    /**
      * Get database name
      *
      * @return string
@@ -132,6 +120,16 @@ class Dumper
     public function getDatabase()
     {
         return $this->connector->getDatabase();
+    }
+
+    /**
+     * Get Connector object
+     *
+     * @return ConnectorInterface
+     */
+    public function getConnector()
+    {
+        return $this->connector;
     }
 
     /**
@@ -183,37 +181,13 @@ class Dumper
     }
 
     /**
-     * Set table include/exclude
-     *
-     * @param string  $table Table name
-     * @param boolean $value   Include or exclude database
-     */
-    protected function setObject($object, & $objects, $value = true)
-    {
-        if (is_array($object)) {
-            foreach ($object as $o) {
-                $this->setObject($o, $objects, $value);
-            }
-        } else {
-            if (empty($object) or ! is_string($object)) {
-                throw new \InvalidArgumentException('Invalid name: "' . $object . '"');
-            }
-
-            $objects[$object] = $value;
-        }
-    }
-
-    /**
      * Are there any table included?
      *
      * @return boolean
      */
     public function hasTable()
     {
-        // Excluded table does not count
-        $tables = array_filter($this->tables);
-
-        return ! empty($tables);
+        return $this->hasObject($this->tables);
     }
 
     /**
@@ -236,17 +210,6 @@ class Dumper
     public function isTableExcluded($table)
     {
         return $this->isObject($table, $this->tables, false);
-    }
-
-    /**
-     * Is table ...?
-     * @param  string  $table
-     * @param  boolean $value
-     * @return boolean
-     */
-    protected function isObject($object, array $objects, $value)
-    {
-        return array_key_exists($object, $objects) and $objects[$object] === $value;
     }
 
     /**
@@ -282,10 +245,7 @@ class Dumper
      */
     public function hasView()
     {
-        // Excluded view does not count
-        $views = array_filter($this->views);
-
-        return ! empty($views);
+        return $this->hasObject($this->views);
     }
 
     /**
@@ -308,6 +268,52 @@ class Dumper
     public function isViewExcluded($view)
     {
         return $this->isObject($view, $this->views, false);
+    }
+
+    /**
+     * Set object include/exclude
+     *
+     * @param string  $object  Object name
+     * @param array   $objects  Objects
+     * @param boolean $value   Include or exclude object
+     */
+    protected function setObject($object, & $objects, $value = true)
+    {
+        if (is_array($object)) {
+            foreach ($object as $o) {
+                $this->setObject($o, $objects, $value);
+            }
+        } else {
+            if (empty($object) or ! is_string($object)) {
+                throw new \InvalidArgumentException('Invalid name: "' . $object . '"');
+            }
+
+            $objects[$object] = $value;
+        }
+    }
+
+    /**
+     * Is object ...?
+     * @param  string  $table
+     * @param  boolean $value
+     * @return boolean
+     */
+    protected function isObject($object, array $objects, $value)
+    {
+        return array_key_exists($object, $objects) and $objects[$object] === $value;
+    }
+
+    /**
+     * Are there any object included?
+     *
+     * @return boolean
+     */
+    protected function hasObject($objects)
+    {
+        // Excluded object does not count
+        $objects = array_filter($objects);
+
+        return ! empty($objects);
     }
 
     /**
