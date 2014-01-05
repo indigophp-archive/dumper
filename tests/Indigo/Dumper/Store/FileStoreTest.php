@@ -26,4 +26,16 @@ class FileStoreTest extends StoreTest
     {
         $this->assertFileExists($this->store->getFile());
     }
+
+    public function tearDown()
+    {
+        unset($this->store);
+    }
+
+    public function testFilePath()
+    {
+        $test = '/tmp/test.file';
+        $store = new FileStore($test);
+        $this->assertEquals($test, $store->getFile());
+    }
 }

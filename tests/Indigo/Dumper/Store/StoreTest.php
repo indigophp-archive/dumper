@@ -46,11 +46,14 @@ abstract class StoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Should not be writable after save
+     *
+     * @expectedException Indigo\Dumper\Exception\StoreNotWritableException
      */
     public function testSave()
     {
         $this->store->save();
 
         $this->assertFalse($this->store->isWritable());
+        $this->store->write('123');
     }
 }

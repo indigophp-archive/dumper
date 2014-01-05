@@ -10,23 +10,19 @@
 
 namespace Indigo\Dumper\Store;
 
+use Flysystem\Filesystem;
+use Flysystem\Adapter\Local as Adapter;
+
 /**
- * Gz Store Test
+ * Flysystem Store Test
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class GzStoreTest extends FileStoreTest
+class FlysystemStoreTest extends StoreTest
 {
     public function setUp()
     {
-        $this->store = new GzStore;
-    }
 
-    /**
-     * @expectedException Indigo\Dumper\Exception\StoreNotReadableException
-     */
-    public function testReadable()
-    {
-        $this->store->read();
+        $this->store = new FlysystemStore(new Filesystem(new Adapter('/tmp')), 'test.file');
     }
 }

@@ -20,7 +20,7 @@ use Indigo\Dumper\Exception\StoreNotReadableException;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class AbstractStore implements StoreInterface
+abstract class AbstractStore implements StoreInterface
 {
     /**
      * Is store writable?

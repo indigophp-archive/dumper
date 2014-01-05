@@ -10,9 +10,6 @@
 
 namespace Indigo\Dumper\Store;
 
-use Indigo\Dumper\Exception\StoreNotWritableException;
-use Indigo\Dumper\Exception\StoreNotReadableException;
-
 /**
  * Variable Store
  *
@@ -34,10 +31,7 @@ class VariableStore extends AbstractStore
      */
     public function write($data)
     {
-        if (!$this->writable) {
-            throw new StoreNotWritableException('Store is not writable');
-        }
-
+        parent::write($data);
         $this->data .= $data;
 
         return strlen($data);
@@ -48,9 +42,7 @@ class VariableStore extends AbstractStore
      */
     public function read()
     {
-        if (!$this->readable) {
-            throw new StoreNotReadableException('Store is not readable');
-        }
+        parent::read();
 
         return $this->data;
     }

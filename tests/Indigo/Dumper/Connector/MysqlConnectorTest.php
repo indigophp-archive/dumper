@@ -15,7 +15,7 @@ namespace Indigo\Dumper\Connector;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
+class MysqlConnectorTest extends ConnectorTest
 {
     public function provider()
     {
@@ -58,6 +58,19 @@ class MysqlConnectorTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertInstanceOf('Indigo\\Dumper\\Connector\\MysqlConnector', $connector);
+    }
+
+    /**
+     * @expectedException PDOException
+     */
+    public function testUnixPath()
+    {
+        $connector = new MysqlConnector(array(
+            'database'                   => 'test',
+            'username'                   => 'travis',
+            'password'                   => '',
+            'unix_socket'                => '/path/to/socket',
+        ));
     }
 
     /**
