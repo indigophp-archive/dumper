@@ -35,7 +35,7 @@ class FileStore extends AbstractStore
 
     public function __construct($file = null)
     {
-        $this->file = $this->file($file);
+        $this->file = $this->makeFile($file);
         $this->handle = fopen($this->file, 'w+');
     }
 
@@ -60,7 +60,7 @@ class FileStore extends AbstractStore
      * @param  string $name
      * @return string
      */
-    protected function file($name)
+    protected function makeFile($name)
     {
         if ($path = dirname($name) and $path !== '.') {
             $path = realpath($path);
@@ -78,19 +78,16 @@ class FileStore extends AbstractStore
     /**
      * {@inheritdoc}
      */
-    public function write($data)
+    protected function doWrite($data)
     {
-        parent::write($data);
-
         return fwrite($this->handle, $data);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function read()
+    protected function doRead()
     {
-        parent::read();
         rewind($this->handle);
 
         return stream_get_contents($this->handle);

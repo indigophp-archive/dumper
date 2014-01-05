@@ -25,8 +25,25 @@ class GzStoreTest extends FileStoreTest
     /**
      * @expectedException Indigo\Dumper\Exception\StoreNotReadableException
      */
-    public function testReadable()
+    public function testNotReadable()
     {
         $this->store->read();
+    }
+
+    /**
+     * @expectedException OverflowException
+     */
+    public function testRead()
+    {
+        $this->store->write('test');
+        $this->store->save();
+        $this->assertTrue($this->store->isReadable());
+
+        if ($this->store->isReadable()) {
+            $data = $this->store->read();
+            $this->assertEquals('test', $data);
+        }
+
+        $this->store->write('test');
     }
 }

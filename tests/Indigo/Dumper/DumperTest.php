@@ -49,9 +49,11 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             array(
                 new Dumper(
                     new MysqlConnector(array(
-                        'database'                   => 'test',
-                        'username'                   => 'travis',
-                        'password'                   => '',
+                        'database'                   => $GLOBALS['mysql_database'],
+                        'username'                   => $GLOBALS['mysql_username'],
+                        'password'                   => $GLOBALS['mysql_password'],
+                        'host'                       => $GLOBALS['mysql_host'],
+                        'port'                       => (int)$GLOBALS['mysql_port'],
                         'drop_database'              => true,
                         'drop_table'                 => true,
                         'drop_view'                  => true,
@@ -65,12 +67,13 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             array(
                 new Dumper(
                     new MysqlConnector(array(
-                        'database'                   => 'test',
-                        'username'                   => 'travis',
-                        'password'                   => '',
-                        'use_transaction'            => false,
-                        'lock_table'                 => false,
-                        'extended_insert'            => false,
+                        'database'        => $GLOBALS['mysql_database'],
+                        'username'        => $GLOBALS['mysql_username'],
+                        'password'        => $GLOBALS['mysql_password'],
+                        'host'            => $GLOBALS['mysql_host'],
+                        'port'            => (int)$GLOBALS['mysql_port'],
+                        'lock_table'      => false,
+                        'extended_insert' => false,
                     )),
                     new VariableStore
                 )
@@ -101,6 +104,11 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      */
     public function testStore($dumper)
     {
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Store\\StoreInterface',
+            $dumper->getStore()
+        );
+
         $store = \Mockery::mock('Indigo\\Dumper\\Store\\StoreInterface', function ($mock) {
             $mock->shouldReceive('getFile')
                 ->andReturn(tempnam(sys_get_temp_dir(), ''));
@@ -114,6 +122,17 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Indigo\\Dumper\\Store\\StoreInterface',
             $dumper->getStore()
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testConnector($dumper)
+    {
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Connector\\ConnectorInterface',
+            $dumper->getConnector()
         );
     }
 
@@ -145,7 +164,6 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testReturn($dumper)
     {
         $this->assertNull($dumper->getOption('nothing_here'));
-        $this->assertNull($dumper->getConnectorOption('nothing_here'));
         $this->assertTrue(is_bool($dumper->getOption('no_data')));
         $this->assertTrue(is_array($dumper->getOption()));
         $this->assertTrue(is_string($dumper->getDatabase()));

@@ -20,7 +20,7 @@ interface StoreInterface
     /**
      * Write data to store
      *
-     * Should only be called by dumper
+     * Should only be called by Dumper
      *
      * @param  string  $data
      * @return integer Bytes written

@@ -29,18 +29,8 @@ class MysqlConnector extends AbstractConnector
     {
         $options = $this->resolveOptions($options);
 
-        $dsn = 'mysql:';
-
-        if (empty($options['unix_socket'])) {
-            $dsn .= 'host=' . $options['host'] . ';port=' . $options['port'];
-        } else {
-            $dsn .= 'unix_socket=' . $options['unix_socket'];
-        }
-
-        $dsn .= ';dbname=' . $options['database'];
-
         $this->pdo = new PDO(
-            $dsn,
+            $this->createDSN(),
             $options['username'],
             $options['password'],
             $options['pdo_options']
@@ -48,6 +38,25 @@ class MysqlConnector extends AbstractConnector
 
         // This is needed on some PHP versions
         $this->pdo->exec("SET NAMES utf8");
+    }
+
+    /**
+     * Create DSN for PDO
+     * @return string DSN
+     */
+    protected function createDSN()
+    {
+        $dsn = 'mysql:';
+
+        if (empty($this->options['unix_socket'])) {
+            $dsn .= 'host=' . $this->options['host'] . ';port=' . $this->options['port'];
+        } else {
+            $dsn .= 'unix_socket=' . $this->options['unix_socket'];
+        }
+
+        $dsn .= ';dbname=' . $this->options['database'];
+
+        return $dsn;
     }
 
     /**

@@ -44,9 +44,8 @@ class FlysystemStore extends AbstractStore
     /**
      * {@inheritdoc}
      */
-    public function write($data)
+    protected function doWrite($data)
     {
-        parent::write($data);
         $this->filesystem->put($this->name, $data);
 
         return strlen($data);
@@ -55,10 +54,8 @@ class FlysystemStore extends AbstractStore
     /**
      * {@inheritdoc}
      */
-    public function read()
+    protected function doRead()
     {
-        parent::read();
-
         return $this->filesystem->read($this->name);
     }
 }

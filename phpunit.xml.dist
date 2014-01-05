@@ -2,6 +2,7 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
     <php>
         <var name="mysql_host" value="localhost" />
+        <var name="mysql_port" value="3306" />
         <var name="mysql_username" value="travis" />
         <var name="mysql_password" value="" />
         <var name="mysql_database" value="test" />

@@ -10,7 +10,6 @@
 
 namespace Indigo\Dumper\Store;
 
-use Indigo\Dumper\Exception\StoreNotWritableException;
 use Indigo\Dumper\Exception\StoreNotReadableException;
 
 /**
@@ -55,30 +54,61 @@ abstract class AbstractStore implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function write($data)
+    final public function write($data)
     {
         if (!$this->writable) {
-            throw new StoreNotWritableException('Store is not writable');
+            throw new \OverflowException('Store is not writable');
         }
+
+        return $this->doWrite($data);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function read()
+    final public function read()
     {
         if (!$this->readable) {
             throw new StoreNotReadableException('Store is not readable');
         }
+
+        return $this->doRead();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function save()
+    final public function save()
     {
         $this->writable = false;
 
+        return $this->doSave();
+    }
+
+    /**
+     * Internal function to write data to store
+     *
+     * Should only be called by dumper
+     *
+     * @param  string  $data
+     * @return integer Bytes written
+     */
+    abstract protected function doWrite($data);
+
+    /**
+     * Internal function to read data from store
+     *
+     * @return string
+     */
+    abstract protected function doRead();
+
+    /**
+     * Do any further processing
+     *
+     * @return boolean Success
+     */
+    protected function doSave()
+    {
         return true;
     }
 }

@@ -22,9 +22,11 @@ class MysqlConnectorTest extends ConnectorTest
         return array(
             array(
                 new MysqlConnector(array(
-                    'database'                   => 'test',
-                    'username'                   => 'travis',
-                    'password'                   => '',
+                    'database'                   => $GLOBALS['mysql_database'],
+                    'username'                   => $GLOBALS['mysql_username'],
+                    'password'                   => $GLOBALS['mysql_password'],
+                    'host'                       => $GLOBALS['mysql_host'],
+                    'port'                       => (int)$GLOBALS['mysql_port'],
                     'drop_table'                 => true,
                     'drop_view'                  => true,
                     'disable_foreign_keys_check' => true,
@@ -33,13 +35,11 @@ class MysqlConnectorTest extends ConnectorTest
             ),
             array(
                 new MysqlConnector(array(
-                    'database'                   => 'test',
-                    'username'                   => 'travis',
-                    'password'                   => '',
-                    'drop_table'                 => false,
-                    'drop_view'                  => false,
-                    'disable_foreign_keys_check' => false,
-                    'use_transaction'            => false,
+                    'database' => $GLOBALS['mysql_database'],
+                    'username' => $GLOBALS['mysql_username'],
+                    'password' => $GLOBALS['mysql_password'],
+                    'host'     => $GLOBALS['mysql_host'],
+                    'port'     => (int)$GLOBALS['mysql_port'],
                 ))
             )
         );
@@ -48,13 +48,11 @@ class MysqlConnectorTest extends ConnectorTest
     public function testInstance()
     {
         $connector = new MysqlConnector(array(
-            'database'                   => 'test',
-            'username'                   => 'travis',
-            'password'                   => '',
-            'drop_table'                 => true,
-            'drop_view'                  => true,
-            'disable_foreign_keys_check' => true,
-            'use_transaction'            => true,
+            'database'                   => $GLOBALS['mysql_database'],
+            'username'                   => $GLOBALS['mysql_username'],
+            'password'                   => $GLOBALS['mysql_password'],
+            'host'                       => $GLOBALS['mysql_host'],
+            'port'                       => (int)$GLOBALS['mysql_port'],
         ));
 
         $this->assertInstanceOf('Indigo\\Dumper\\Connector\\MysqlConnector', $connector);
@@ -66,9 +64,9 @@ class MysqlConnectorTest extends ConnectorTest
     public function testUnixPath()
     {
         $connector = new MysqlConnector(array(
-            'database'                   => 'test',
-            'username'                   => 'travis',
-            'password'                   => '',
+            'database'                   => $GLOBALS['mysql_database'],
+            'username'                   => $GLOBALS['mysql_username'],
+            'password'                   => $GLOBALS['mysql_password'],
             'unix_socket'                => '/path/to/socket',
         ));
     }
@@ -78,6 +76,6 @@ class MysqlConnectorTest extends ConnectorTest
      */
     public function testValidReturns($connector)
     {
-        $this->assertEquals('test', $connector->getDatabase());
+        $this->assertEquals($GLOBALS['mysql_database'], $connector->getDatabase());
     }
 }

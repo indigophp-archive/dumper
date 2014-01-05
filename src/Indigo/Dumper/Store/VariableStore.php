@@ -29,9 +29,8 @@ class VariableStore extends AbstractStore
     /**
      * {@inheritdoc}
      */
-    public function write($data)
+    protected function doWrite($data)
     {
-        parent::write($data);
         $this->data .= $data;
 
         return strlen($data);
@@ -40,10 +39,8 @@ class VariableStore extends AbstractStore
     /**
      * {@inheritdoc}
      */
-    public function read()
+    protected function doRead()
     {
-        parent::read();
-
         return $this->data;
     }
 }

@@ -21,6 +21,7 @@
         "frenkynet/flysystem": "Filesystem abstraction layer used for file uploads"
     },
     "autoload": {
-        "psr-0": {"Indigo\\Dumper": "src/"}
+        "psr-0": {"Indigo\\Dumper": "src/"},
+        "files": ["src/functions.php"]
     }
 }
