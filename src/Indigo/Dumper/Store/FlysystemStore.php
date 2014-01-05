@@ -11,8 +11,6 @@
 namespace Indigo\Dumper\Store;
 
 use Flysystem\Filesystem;
-use Indigo\Dumper\Exception\StoreNotWritableException;
-use Indigo\Dumper\Exception\StoreNotReadableException;
 
 /**
  * Flysystem Store
@@ -60,6 +58,7 @@ class FlysystemStore extends AbstractStore
     public function read()
     {
         parent::read();
+
         return $this->filesystem->read($this->name);
     }
 }

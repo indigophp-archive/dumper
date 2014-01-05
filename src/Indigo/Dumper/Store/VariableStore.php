@@ -10,9 +10,6 @@
 
 namespace Indigo\Dumper\Store;
 
-use Indigo\Dumper\Exception\StoreNotWritableException;
-use Indigo\Dumper\Exception\StoreNotReadableException;
-
 /**
  * Variable Store
  *
@@ -46,6 +43,7 @@ class VariableStore extends AbstractStore
     public function read()
     {
         parent::read();
+
         return $this->data;
     }
 }
