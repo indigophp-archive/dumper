@@ -128,6 +128,17 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provider
      */
+    public function testConnector($dumper)
+    {
+        $this->assertInstanceOf(
+            'Indigo\\Dumper\\Connector\\ConnectorInterface',
+            $dumper->getConnector()
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
     public function testDump($dumper)
     {
         $dumper->includeTable('test')->includeView('v_test');
@@ -153,7 +164,6 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testReturn($dumper)
     {
         $this->assertNull($dumper->getOption('nothing_here'));
-        $this->assertNull($dumper->getConnectorOption('nothing_here'));
         $this->assertTrue(is_bool($dumper->getOption('no_data')));
         $this->assertTrue(is_array($dumper->getOption()));
         $this->assertTrue(is_string($dumper->getDatabase()));
