@@ -21,4 +21,12 @@ class GzStoreTest extends FileStoreTest
     {
         $this->store = new GzStore;
     }
+
+    /**
+     * @expectedException Indigo\Dumper\Exception\StoreNotReadableException
+     */
+    public function testReadable()
+    {
+        $this->store->read();
+    }
 }
