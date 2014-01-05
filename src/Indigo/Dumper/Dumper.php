@@ -251,8 +251,8 @@ class Dumper
 
     /**
      * Is table ...?
-     * @param  string   $table
-     * @param  boolean  $value
+     * @param  string  $table
+     * @param  boolean $value
      * @return boolean
      */
     protected function isTable($table, $value)
@@ -341,8 +341,8 @@ class Dumper
 
     /**
      * Is view ...?
-     * @param  string   $view
-     * @param  boolean  $value
+     * @param  string  $view
+     * @param  boolean $value
      * @return boolean
      */
     protected function isView($view, $value)
