@@ -164,7 +164,7 @@ class Dumper
      */
     public function includeTable($table)
     {
-        $this->setTable($table);
+        $this->setObject($table, $this->tables);
 
         return $this;
     }
@@ -177,7 +177,7 @@ class Dumper
      */
     public function excludeTable($table)
     {
-        $this->setTable($table, false);
+        $this->setObject($table, $this->tables, false);
 
         return $this;
     }
@@ -186,32 +186,21 @@ class Dumper
      * Set table include/exclude
      *
      * @param string  $table Table name
-     * @param boolean $set   Include or exclude database
+     * @param boolean $value   Include or exclude database
      */
-    protected function setTable($table, $set = true)
+    protected function setObject($object, & $objects, $value = true)
     {
-        if (is_array($table)) {
-            foreach ($table as $t) {
-                $this->setTable($t, $set);
+        if (is_array($object)) {
+            foreach ($object as $o) {
+                $this->setObject($o, $objects, $value);
             }
         } else {
-            $this->isValidName($table);
-            $this->tables[$table] = $set;
-        }
-    }
+            if (empty($object) or ! is_string($object)) {
+                throw new \InvalidArgumentException('Invalid name: "' . $object . '"');
+            }
 
-    /**
-     * Check whether given value is a valid table or view name
-     * @param  string  $name
-     * @return boolean
-     */
-    protected function isValidName($name)
-    {
-        if (empty($name) or ! is_string($name)) {
-            throw new \InvalidArgumentException('Invalid name: "' . $name . '"');
+            $objects[$object] = $value;
         }
-
-        return true;
     }
 
     /**
@@ -235,7 +224,7 @@ class Dumper
      */
     public function isTableIncluded($table)
     {
-        return $this->isTable($table, true);
+        return $this->isObject($table, $this->tables, true);
     }
 
     /**
@@ -246,7 +235,7 @@ class Dumper
      */
     public function isTableExcluded($table)
     {
-        return $this->isTable($table, false);
+        return $this->isObject($table, $this->tables, false);
     }
 
     /**
@@ -255,9 +244,9 @@ class Dumper
      * @param  boolean $value
      * @return boolean
      */
-    protected function isTable($table, $value)
+    protected function isObject($object, array $objects, $value)
     {
-        return array_key_exists($table, $this->tables) and $this->tables[$table] === $value;
+        return array_key_exists($object, $objects) and $objects[$object] === $value;
     }
 
     /**
@@ -268,7 +257,7 @@ class Dumper
      */
     public function includeView($view)
     {
-        $this->setView($view);
+        $this->setObject($view, $this->views);
 
         return $this;
     }
@@ -281,27 +270,9 @@ class Dumper
      */
     public function excludeView($view)
     {
-        $this->setView($view, false);
+        $this->setObject($view, $this->views, false);
 
         return $this;
-    }
-
-    /**
-     * Set view include/exclude
-     *
-     * @param string  $view View name
-     * @param boolean $set  Include or exclude database
-     */
-    protected function setView($view, $set = true)
-    {
-        if (is_array($view)) {
-            foreach ($view as $v) {
-                $this->setView($v, $set);
-            }
-        } else {
-            $this->isValidName($view);
-            $this->views[$view] = $set;
-        }
     }
 
     /**
@@ -325,7 +296,7 @@ class Dumper
      */
     public function isViewIncluded($view)
     {
-        return $this->isView($view, true);
+        return $this->isObject($view, $this->views, true);
     }
 
     /**
@@ -336,18 +307,7 @@ class Dumper
      */
     public function isViewExcluded($view)
     {
-        return $this->isView($view, false);
-    }
-
-    /**
-     * Is view ...?
-     * @param  string  $view
-     * @param  boolean $value
-     * @return boolean
-     */
-    protected function isView($view, $value)
-    {
-        return array_key_exists($view, $this->views) and $this->views[$view] === $value;
+        return $this->isObject($view, $this->views, false);
     }
 
     /**
