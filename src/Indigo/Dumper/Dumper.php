@@ -195,12 +195,23 @@ class Dumper
                 $this->setTable($t, $set);
             }
         } else {
-            if (empty($table) or ! is_string($table)) {
-                throw new \InvalidArgumentException('Invalid table name: "' . $table . '"');
-            }
-
+            $this->isValidName($table);
             $this->tables[$table] = $set;
         }
+    }
+
+    /**
+     * Check whether given value is a valid table or view name
+     * @param  string  $name
+     * @return boolean
+     */
+    protected function isValidName($name)
+    {
+        if (empty($name) or ! is_string($name)) {
+            throw new \InvalidArgumentException('Invalid name: "' . $name . '"');
+        }
+
+        return true;
     }
 
     /**
@@ -224,7 +235,7 @@ class Dumper
      */
     public function isTableIncluded($table)
     {
-        return array_key_exists($table, $this->tables) and $this->tables[$table] === true;
+        return $this->isTable($table, true);
     }
 
     /**
@@ -235,7 +246,18 @@ class Dumper
      */
     public function isTableExcluded($table)
     {
-        return array_key_exists($table, $this->tables) and $this->tables[$table] === false;
+        return $this->isTable($table, false);
+    }
+
+    /**
+     * Is table ...?
+     * @param  string   $table
+     * @param  boolean  $value
+     * @return boolean
+     */
+    protected function isTable($table, $value)
+    {
+        return array_key_exists($table, $this->tables) and $this->tables[$table] === $value;
     }
 
     /**
@@ -277,10 +299,7 @@ class Dumper
                 $this->setView($v, $set);
             }
         } else {
-            if (empty($view) or ! is_string($view)) {
-                throw new \InvalidArgumentException('Invalid table name: "' . $view . '"');
-            }
-
+            $this->isValidName($view);
             $this->views[$view] = $set;
         }
     }
@@ -306,7 +325,7 @@ class Dumper
      */
     public function isViewIncluded($view)
     {
-        return array_key_exists($view, $this->views) and $this->views[$view] === true;
+        return $this->isView($view, true);
     }
 
     /**
@@ -317,7 +336,18 @@ class Dumper
      */
     public function isViewExcluded($view)
     {
-        return array_key_exists($view, $this->views) and $this->views[$view] === false;
+        return $this->isView($view, false);
+    }
+
+    /**
+     * Is view ...?
+     * @param  string   $view
+     * @param  boolean  $value
+     * @return boolean
+     */
+    protected function isView($view, $value)
+    {
+        return array_key_exists($view, $this->views) and $this->views[$view] === $value;
     }
 
     /**
