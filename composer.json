@@ -15,11 +15,11 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "frenkynet/flysystem": "dev-master",
+        "league/flysystem": "dev-master",
         "mockery/mockery": "dev-master@dev"
     },
     "suggest": {
-        "frenkynet/flysystem": "Filesystem abstraction layer used for file uploads"
+        "league/flysystem": "Filesystem abstraction layer used for file uploads"
     },
     "autoload": {
         "psr-0": {"Indigo\\Dumper": "src/"},

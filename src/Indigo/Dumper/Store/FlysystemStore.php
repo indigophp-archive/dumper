@@ -10,7 +10,7 @@
 
 namespace Indigo\Dumper\Store;
 
-use Flysystem\Filesystem;
+use League\Flysystem\Filesystem;
 
 /**
  * Flysystem Store
