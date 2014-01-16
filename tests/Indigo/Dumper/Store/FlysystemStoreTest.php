@@ -10,8 +10,8 @@
 
 namespace Indigo\Dumper\Store;
 
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Local as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as Adapter;
 
 /**
  * Flysystem Store Test
