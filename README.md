@@ -6,6 +6,8 @@
 
 **Dump databases to SQL file and store it where you want**
 
+# Important: This is not maintained anymore. Use [backup-manager](https://github.com/heybigname/backup-manager) instead.
+
 
 Currently supported databases:
 
